@@ -1,0 +1,8 @@
+== Getting Started
+
+1. Install node and grunt
+  http://weblog.bocoup.com/introducing-grunt/
+  sudo npm install -g grunt
+
+2. Generate the Plugin
+  grunt concat
