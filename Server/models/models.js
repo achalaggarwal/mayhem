@@ -1,8 +1,12 @@
 /*
- * Model
+ * Schema
  */
 
-var Schema = require('./schema')();
+require('./schema');
 
-require('./user')(Schema.User);
-require('./job')(Schema.Job);
+/*
+ * Models
+ */
+
+require('./user');
+require('./job');
