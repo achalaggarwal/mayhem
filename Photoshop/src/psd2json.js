@@ -50,43 +50,23 @@ JSONExporter.prototype.guessControl = function(name){
   }
 }
 
-JSONExporter.prototype.removeTextLayers = function(layer) {
+JSONExporter.prototype.removeControlLayers = function(layer, helperLayer, helperDoc) {
   var _layer;
   var _remove = [];
   var _properties = null;
 
-  for(var i = 1; i <= layer.layers.length; ++i) {
-    index  = layer.layers.length - i;
-    _layer = layer.layers[index];
-
-    if (_layer.kind == LayerKind.TEXT) {
-      _properties = this.render(_layer);
-      _remove.push(_layer);
-    }
-  }
-
-  for (var i in _remove) {
-    _remove[i].remove();
-  }
-
-  return _properties;
-};
-
-JSONExporter.prototype.removeControlLayers = function(layer) {
-  var _layer;
-  var _remove = [];
-  var _properties = null;
-
-  for(var i = 0; i < layer.layers.length; i++) {
-    _layer = layer.layers[i];
+  for(var i = 0; i < helperLayer.layers.length; i++) {
+    _layer = helperLayer.layers[i];
 
     if (_layer.kind == LayerKind.TEXT) {
       _remove.push(_layer);
-      _properties = this.render(_layer);
+      _properties = this.render(layer.layers[i]);
     } else if (_layer.typename == "LayerSet" && _layer.bounds[0] > 0) {
       _remove.push(_layer);
     }
   }
+
+  app.activeDocument = helperDoc;
 
   for (var i in _remove) {
     _remove[i].remove();
@@ -141,13 +121,9 @@ JSONExporter.prototype.render = function(layer, guessedName){
       var helperDoc = this.doc.duplicate(),
         helperLayer = helperDoc.activeLayer;
 
-      if (guessedName == 'Button' || guessedName == 'TextField') {
-        outLayer.content = this.removeTextLayers(layer);
-      } else if (guessedName == 'NavigationBar') {
-        outLayer.content = this.removeControlLayers(layer);
+      if (guessedName == 'Button' || guessedName == 'TextField' || guessedName == 'NavigationBar') {
+        outLayer.content = this.removeControlLayers(layer, helperLayer, helperDoc);
       }
-
-      app.activeDocument = helperDoc;
 
       // we'll trim later. I had some files with transparent layer-edges which aren't very
       // helpful. I need to crop as well, since there are some problems with trimming and
@@ -205,40 +181,40 @@ JSONExporter.prototype.render = function(layer, guessedName){
       var tsr = list.getList(cTID("Txtt"));
 
       for (var i = 0; i < tsr.count; i++) {
-        var tsr0              = null;
-        var textStyle         = null;
-        var color             = null;
-        var autoLeading       = null;
-        var size              = null;
-        var leading           = null;
-        var text              = null;
-        var font              = null;
-        var red               = null;
-        var blue              = null;
-        var green             = null;
-        var fill              = null;
+        var tsr0        = null;
+        var textStyle   = null;
+        var color       = null;
+        var autoLeading = null;
+        var size        = null;
+        var leading     = null;
+        var text        = null;
+        var font        = null;
+        var red         = null;
+        var blue        = null;
+        var green       = null;
+        var fill        = null;
 
-        try { tsr0              = tsr.getObjectValue(i); } catch(ex){}
-        try { textStyle         = tsr0.getObjectValue(cTID("TxtS")); } catch(ex){}
-        try { color             = textStyle.getObjectValue(cTID("Clr ")); } catch(ex){}
-        try { autoLeading       = textStyle.getBoolean(sTID("autoLeading")); } catch(ex){}
-        try { size              = parseInt(textStyle.getUnitDoubleValue(cTID("Sz  ", pts))); } catch(ex){}
-        try { leading           = autoLeading ? false : textStyle.getUnitDoubleValue(cTID("Ldng")); } catch(ex){}
-        try { text              = ti.contents; } catch(ex){}
-        try { font              = textStyle.getString(cTID("FntN")); } catch(ex){}
-        try { red               = color.getInteger(cTID("Rd  ")); } catch(ex){}
-        try { blue              = color.getInteger(cTID("Bl  ")); } catch(ex){}
-        try { green             = color.getInteger(cTID("Grn ")); } catch(ex){}
-        try { fill              = textStyle.getString(cTID("Fl  ")); } catch(ex){}
+        try { tsr0        = tsr.getObjectValue(i); } catch(ex){}
+        try { textStyle   = tsr0.getObjectValue(cTID("TxtS")); } catch(ex){}
+        try { color       = textStyle.getObjectValue(cTID("Clr ")); } catch(ex){}
+        try { autoLeading = textStyle.getBoolean(sTID("autoLeading")); } catch(ex){}
+        try { size        = parseInt(textStyle.getUnitDoubleValue(cTID("Sz  ", pts))); } catch(ex){}
+        try { leading     = autoLeading ? false : textStyle.getUnitDoubleValue(cTID("Ldng")); } catch(ex){}
+        try { text        = ti.contents; } catch(ex){}
+        try { font        = textStyle.getString(cTID("FntN")); } catch(ex){}
+        try { red         = color.getInteger(cTID("Rd  ")); } catch(ex){}
+        try { blue        = color.getInteger(cTID("Bl  ")); } catch(ex){}
+        try { green       = color.getInteger(cTID("Grn ")); } catch(ex){}
+        try { fill        = textStyle.getString(cTID("Fl  ")); } catch(ex){}
 
         var details = {
-          red               : red,
-          blue              : blue,
-          green             : green,
-          size              : size,
-          text              : text,
-          font              : font,
-          fill              : fill
+          red   : red,
+          blue  : blue,
+          green : green,
+          size  : size,
+          text  : text,
+          font  : font,
+          fill  : fill
         };
 
         ranges.push(details);
@@ -281,7 +257,7 @@ JSONExporter.prototype.render = function(layer, guessedName){
 }
 
 function main() {
-  var exporter = new JSONExporter("/Users/gogo/Desktop/test.psd");
+  var exporter = new JSONExporter("~/Desktop/photoshop/source.psd");
   exporter.process();
 }
 
