@@ -5,6 +5,8 @@ require.extensions[".json"] = function (m) {
   m.exports = JSON.parse(fs.readFileSync(m.filename));
 };
 
+process.env.NODE_ENV = 'development';
+
 var _env    = process.env.NODE_ENV == undefined ? 'production' : process.env.NODE_ENV;
 var _config = require("./config.json")[_env]
 

@@ -3,6 +3,8 @@ var mongoose = require('mongoose');
 
 module.exports = function() {
   
+  console.log(AppConfig.mongo.path);
+  
   var db = mongoose.createConnection(AppConfig.mongo.path);
   
   db.on('error', console.error.bind(console, 'connection error:'));  

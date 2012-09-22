@@ -18,7 +18,7 @@
       "url" : "http://mayhemapp.io"
     },
     "mongo": {
-      "path": "mongodb://tinymeme:tinymeme@flame.mongohq.com:27072/app4389105"
+      "path": "mongodb://localhost/mayhemapp_development"
     }
   }
 }
