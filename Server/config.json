@@ -1,0 +1,24 @@
+{
+  "development": {
+    "name" : "MayhemApp",
+    "server" : {
+      "port" : "3000",
+      "hostname" : "localhost",
+      "url" : "http://localhost:3000"
+    },
+    "mongo": {
+      "path": "mongodb://localhost/mayhemapp_development"
+    }
+  },
+  "production": {
+    "name" : "MayhemApp",
+    "server" : {
+      "port" : "3000",
+      "hostname": "mayhemapp.io",
+      "url" : "http://mayhemapp.io"
+    },
+    "mongo": {
+      "path": "mongodb://localhost/mayhemapp_development"
+    }
+  }
+}
