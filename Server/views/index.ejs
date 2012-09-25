@@ -1,3 +1,24 @@
 <% layout('layout') -%>
 <h1><%= title %></h1>
 <p>Welcome to <%= title %></p>
+
+<!-- Adds the Filepicker.io javascript library to the page -->
+<script src="https://api.filepicker.io/v0/filepicker.js"></script>
+<script type="text/javascript">
+    //Seting up Filepicker.io with your api key
+    filepicker.setKey('AUS33DYKaTl6eYH4HJC73z');
+</script>
+
+<div id="upload">Click here to upload</div>
+<div id="output"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script>
+$('#upload').bind('click', function() {
+  filepicker.getFile('*/*', function(url, data){
+    // $('#output').append(url).html(data.filename));
+    console.info(url);
+    console.info(data);
+  });
+});
+</script>
