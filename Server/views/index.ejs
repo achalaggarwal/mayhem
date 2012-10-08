@@ -12,13 +12,16 @@
 <div id="upload">Click here to upload</div>
 <div id="output"></div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 <script>
 $('#upload').bind('click', function() {
   filepicker.getFile('*/*', function(url, data){
     // $('#output').append(url).html(data.filename));
-    console.info(url);
-    console.info(data);
+    $.ajax({
+      type: 'POST',
+      url: '/upload',
+      data: {data: data, url: url},
+      success: function(data) { window.location = data; },
+    });
   });
 });
 </script>
