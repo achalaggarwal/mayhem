@@ -1,6 +1,154 @@
 <% layout('layout') -%>
-<h1><%= title %></h1>
-<p>Welcome to <%= title %></p>
+<header>
+  <ul>
+    <li><a href="" class="bttn">Create Account</a></li>
+    <li><a href="/login" class="ybttn">Login</a></li>
+  </ul>
+  <div class="action">
+    <a href="#" id="upload">UPLOAD DESIGN PSD</a>
+    <h1>
+      for <strong>iPhone</strong> apps
+      <br />
+      &amp;
+      <br />
+      get <strong>Xcode</strong> project
+    </h1>
+    <p>runs in simulator and iPhone</p>
+  </div>
+</header>
+<div class="main">
+  <div class="clear" id="demo">
+    <h2>Sample / Demos</h2>
+    <div class="clear holder">
+      <div class="sampleApp">
+        <div>&nbsp;</div>
+      </div>
+      <div class="info" >
+        <h3>Break down the barriers for design and developemnt</h3>
+        <ul class="clear">
+          <li>
+            <a href="">Developer</a>
+            <div>
+              <p class="note">
+                Pellentesque habitant morbi tristique senectus et netus
+                malesuada fames ac turpis egestas. Vestibulum tortor
+                quam, feugiat vitae, ultricies eget, tempor sit amet, ante.
+                Donec eu libero sit amet quam egestas semper.
+              </p>
+              <ul class="points">
+                <li>advantage 1</li>
+                <li>advantage 2</li>
+                <li>advantage 3</li>
+              </ul>
+            </div>
+          </li>
+          <!--<li>
+            <a href="">Designer</a>
+            <div>
+              <p clas="note">
+                Pellentesque habitant morbi tristique senectus et netus
+                malesuada fames ac turpis egestas. Vestibulum tortor
+                quam, feugiat vitae, ultricies eget, tempor sit amet, ante.
+                Donec eu libero sit amet quam egestas semper.
+              </p>
+              <ul>
+                <li>advantage 1</li>
+                <li>advantage 2</li>
+                <li>advantage 3</li>
+              </ul>
+            </div>
+          </li>-->
+        </ul>
+        <div class="actions">
+          <a href="">Xcode Project</a>
+          <a href="">PSD Design</a>
+          <span class="pointer">&nbsp;</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="working">
+    <h2>How it Works</h2>
+    <p class="note">
+      Pellentesque habitant morbi tristique senectus et netus
+      malesuada fames ac turpis egestas. Vestibulum tortor
+      quam, feugiat vitae, ultricies eget, tempor sit amet, ante.
+      Donec eu libero sit amet quam egestas semper.
+    </p>
+    <div class="details clear">
+      <ul class="psd">
+        <li class="heading">Making the Psd</li>
+        <li class="">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+        <li class="">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+        <li class="">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+        <li class="">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+      </ul>
+      <ul class="code">
+        <li class="heading">Getting the Code</li>
+        <li class="">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+        <li class="">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+        <li class="">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+        <li class="">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+      </ul>
+    </div>
+  </div>
+  <div id="pricing">
+    <h2>Pricing</h2>
+    <div class="clear">
+      <ul class="free">
+        <li class="icon">&nbsp;</li>
+        <li class="heading">Free</li>
+        <li class="note">Speed up development</li>
+        <li class="info">Get 25 points which <br /> convert up to 25 Psd’s</li>
+        <li class=""><a href="" class="ybttn">Get name now!</a></li>
+      </ul>
+      <!--<ul class="pro">
+        <li class="icon">&nbsp;</li>
+        <li class="heading">Free</li>
+        <li class="note">Speed up development</li>
+        <li class="info">Get 25 points which convert up to 25 Psd’s</li>
+        <li class=""><a href="">Get name now!</a></li>
+      </ul>
+      <ul class="teams">
+        <li class="icon">&nbsp;</li>
+        <li class="heading">Free</li>
+        <li class="note">Speed up development</li>
+        <li class="info">Get 25 points which convert up to 25 Psd’s</li>
+        <li class=""><a href="">Get name now!</a></li>
+      </ul>-->
+    </div>
+  </div>
+  <div id="roadmap">
+    <h2>Road ahead</h2>
+    <p class="note">
+      Pellentesque habitant morbi tristique senectus et netus
+      malesuada fames ac turpis egestas. Vestibulum tortor
+      quam, feugiat vitae, ultricies eget, tempor sit amet, ante.
+      Donec eu libero sit amet quam egestas semper.
+    </p>
+    <div class="clear set">
+      <ul class="col">
+        <li class="icon"><span>&nbsp;</span></li>
+        <li class="heading">Lorem ipsum habitant</li>
+        <li class="">ipsum dolor sit amet, consectetuer
+adipiscing elit.</li>
+      </ul>
+      <ul class="col middle">
+        <li class="icon"><span>&nbsp;</span></li>
+        <li class="heading">Lorem ipsum habitant</li>
+        <li class="">ipsum dolor sit amet, consectetuer
+adipiscing elit.</li>
+      </ul>
+      <ul class="col">
+        <li class="icon"><span>&nbsp;</span></li>
+        <li class="heading">Lorem ipsum habitant</li>
+        <li class="">ipsum dolor sit amet, consectetuer
+adipiscing elit.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+<footer></footer>
 
 <!-- Adds the Filepicker.io javascript library to the page -->
 <script src="https://api.filepicker.io/v0/filepicker.js"></script>
@@ -8,9 +156,6 @@
     //Seting up Filepicker.io with your api key
     filepicker.setKey('AUS33DYKaTl6eYH4HJC73z');
 </script>
-
-<div id="upload">Click here to upload</div>
-<div id="output"></div>
 
 <script>
 $('#upload').bind('click', function() {
