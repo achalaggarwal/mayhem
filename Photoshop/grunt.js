@@ -1,4 +1,6 @@
 module.exports = function(grunt) {
+  grunt.loadTasks('./grunt');
+
   // Project configuration.
   grunt.initConfig({
     pkg: '<json:package.json>',
@@ -9,15 +11,23 @@ module.exports = function(grunt) {
         '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
         ' */'
     },
+    typescript: {
+      base: {
+        src: ['src/json_exporter.ts', 'src/main.ts'],
+        dest: 'lib'
+      }
+    },
     concat: {
       dist: {
-        src: ['src/js_beautify.js', 'src/json2.js', '<banner:meta.banner>',  'src/psd2json.js'],
+        src: ['lib/js_beautify.js', 'lib/json2.js', 'lib/async.min.js', '<banner:meta.banner>', 'lib/src/json_exporter.js', 'lib/src/main.js'],
         dest: 'dist/psd2json.jsx'
       }
     },
     watch: {
-      files: ['src/js_beautify.js', 'src/json2.js', 'src/psd2json.js'],
-      tasks: 'concat'
+      files: ['src/json_exporter.ts', 'src/main.ts'],
+      tasks: 'typescript concat'
     }
   });
+
+  grunt.registerTask('default', 'typescript concat');
 };
