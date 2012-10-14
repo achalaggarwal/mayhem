@@ -26,6 +26,7 @@ User = db.model('User', userSchema);
 var jobSchema = new mongoose.Schema({
   status: Number,
   filePath: String,
+  output: String,
   thumbnail: String,
   owner: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
 });

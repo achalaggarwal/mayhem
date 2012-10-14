@@ -1,0 +1,590 @@
+/*---------------------------------------------------
+
+version 1.o
+Dated: 18/03/2012
+by: bd
+
+---------------------------------------------------*/
+
+/*------------General Css-------------------------*/
+
+
+body {
+  color: #555555;
+  font-size: 14px;
+  background-color:;
+  font-family: 'KlavikaRegular-OSF', arial, sans-serif;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  color: ;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.clear {
+  overflow: hidden;
+}
+
+.noborder {
+  border: none !important;
+}
+
+.noMargin {
+  margin: 0 !important;
+}
+
+.noMarginRght {
+  margin-right: 0 !important;
+}
+
+/*------------Font face---------------------------*/
+
+@font-face {
+  font-family: 'Freehand575Regular';
+  src: url('../fonts/freehand575-webfont.eot');
+  src: url('../fonts/freehand575-webfont.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/freehand575-webfont.woff') format('woff'),
+       url('../fonts/freehand575-webfont.ttf') format('truetype'),
+       url('../fonts/freehand575-webfont.svg#Freehand575Regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KlavikaRegular-OSF';
+  src: url('../fonts/klavikaregular-osf.eot');
+  src: url('../fonts/klavikaregular-osf.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/klavikaregular-osf.woff') format('woff'),
+       url('../fonts/klavikaregular-osf.ttf') format('truetype'),
+       url('../fonts/klavikaregular-osf.svg#klavikaregular-osf') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KlavikaRegCaps-SC';
+  src: url('../fonts/klavikaregcaps-sc.eot');
+  src: url('../fonts/klavikaregcaps-sc.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/klavikaregcaps-sc.woff') format('woff'),
+       url('../fonts/klavikaregcaps-sc.ttf') format('truetype'),
+       url('../fonts/klavikaregcaps-sc.svg#klavikaregcaps-sc') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KlavikaMedCaps-SC';
+  src: url('../fonts/klavikamedcaps-sc.eot');
+  src: url('../fonts/klavikamedcaps-sc.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/klavikamedcaps-sc.woff') format('woff'),
+       url('../fonts/klavikamedcaps-sc.ttf') format('truetype'),
+       url('../fonts/klavikamedcaps-sc.svg#klavikamedcaps-sc') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KlavikaLight-OSF';
+  src: url('../fonts/klavikalight-osf.eot');
+  src: url('../fonts/klavikalight-osf.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/klavikalight-osf.woff') format('woff'),
+       url('../fonts/klavikalight-osf.ttf') format('truetype'),
+       url('../fonts/klavikalight-osf.svg#klavikalight-osf') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KlavikaBold-Bold';
+  src: url('../fonts/klavikaboldbold1.eot');
+  src: url('../fonts/klavikaboldbold1.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/klavikaboldbold1.woff') format('woff'),
+       url('../fonts/klavikaboldbold1.ttf') format('truetype'),
+       url('../fonts/klavikaboldbold1.svg#klavikaboldbold1') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+
+/*------------general---------------------------*/
+
+
+.wrapper {
+  width: 100%;
+  background:#f8f8f8 url(../img/bkg.jpg) repeat left top;
+}
+
+h1 {
+
+
+}
+
+h2 {
+  color: #FFFFFF;
+  font-size: 32px;
+  font-weight: normal;
+  font-family: 'KlavikaMedCaps-SC';
+  text-shadow: 0px 1px 0px #9f1628;
+
+}
+
+h3 {
+
+}
+
+.bttn {
+  color: #666;
+  border: 1px solid #a5a5a6;
+  font-family: 'KlavikaMedCaps-SC';
+  font-size: 15px;
+  padding: 6px 12px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  background: #fcda02; /* Old browsers */
+  background: -moz-linear-gradient(top,  #fcda02 0%, #dadce1 0%, #eeeff1 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fcda02), color-stop(0%,#dadce1), color-stop(100%,#eeeff1)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #fcda02 0%,#dadce1 0%,#eeeff1 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #fcda02 0%,#dadce1 0%,#eeeff1 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #fcda02 0%,#dadce1 0%,#eeeff1 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #fcda02 0%,#dadce1 0%,#eeeff1 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcda02', endColorstr='#eeeff1',GradientType=0 ); /* IE6-9 */
+  box-shadow: 0 1px 0 #f5f6f7 inset;
+  text-shadow: 0px 1px 0px #FFFFFF;
+}
+
+a.bttn:hover, a.bttn:focus {
+  color: #8b4602;
+}
+
+.ybttn {
+  color: #8b4602;
+  border: 1px solid #ba8707;
+  font-family: 'KlavikaMedCaps-SC';
+  font-size: 15px;
+  padding: 6px 12px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  background: #fcda02; /* Old browsers */
+  background: -moz-linear-gradient(top,  #fcda02 0%, #fddf02 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fcda02), color-stop(100%,#fddf02)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #fcda02 0%,#fddf02 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #fcda02 0%,#fddf02 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #fcda02 0%,#fddf02 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #fcda02 0%,#fddf02 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcda02', endColorstr='#fddf02',GradientType=0 ); /* IE6-9 */
+  box-shadow: 0 1px 0 #FEE903 inset;
+  text-shadow: 0px 1px 0px #FFFFFF;
+}
+
+a.ybttn:hover, a.ybttn:focus {
+  color: #8b4602;
+}
+
+/*------------header---------------------------*/
+
+header {
+  overflow: hidden;
+  width: 100%;
+  margin: 0 auto;
+  height: 345px;
+  border-bottom: 1px solid #c17a91;
+  background: url(../img/blk-bkg.jpg) repeat left top;
+}
+
+header ul {
+  width: 960px;
+  overflow: hidden;
+  margin: 0 auto;
+  padding: 20px 0 12px;
+}
+
+header ul li, .header ul li a {
+  float: right;
+}
+
+header ul > li:first-child a {
+  margin-left: 10px;
+}
+
+header ul li a:hover, header ul li a:focus {
+  color: #8b4602;
+}
+
+header .action {
+  width: 860px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+header .action a {
+  color: #FFFFFF;
+  width: 341px;
+  display: block;
+  font-size: 18px;
+  padding: 14px 0;
+  margin: 0 auto;
+  text-align: center;
+  border: 1px solid #0495ba;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  font-family: 'KlavikaBold-Bold';
+   text-shadow: 0px 1px 0px #159abb;
+  box-shadow: inset 0 1px 0 #fefefe,  0 1px 1px #373c3c;
+  background: #fcda02; /* Old browsers */
+  background: -moz-linear-gradient(top,  #fcda02 0%, #00ccff 0%, #2cd1fa 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fcda02), color-stop(0%,#00ccff), color-stop(100%,#2cd1fa)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #fcda02 0%,#00ccff 0%,#2cd1fa 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #fcda02 0%,#00ccff 0%,#2cd1fa 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #fcda02 0%,#00ccff 0%,#2cd1fa 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #fcda02 0%,#00ccff 0%,#2cd1fa 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcda02', endColorstr='#2cd1fa',GradientType=0 ); /* IE6-9 */
+}
+
+header .action h1 {
+  color: #FFFFFF;
+  font-size: 29px;
+  margin-bottom: 5px;
+}
+
+header .action strong {
+  font-size: 34px;
+  font-family: 'KlavikaBold-Bold';
+}
+
+header .action p {
+  color: #d50b29;
+  font-size: 19px;
+  margin-top: 0px;
+  font-family: 'KlavikaLight-OSF';
+}
+
+/*------------main---------------------------*/
+
+.main {
+
+}
+
+.main h2{
+  margin: 36px 0;
+  text-align: center;
+}
+
+/*--demo--*/
+
+#demo {
+  width: 100%;
+  border-bottom: 1px solid #FFFFFF;
+  background: url(../img/red-bkg.jpg) repeat left top;
+}
+
+#demo h2 {
+}
+
+#demo .holder {
+  width: 860px;
+  margin: 0 auto 36px;
+  position: relative;
+}
+
+.sampleApp {
+  float: left;
+  width: 385px;
+  height: 726px;
+  background: url(../img/appholder.png) no-repeat left top;
+}
+
+.sampleApp div {
+  top: 124px;
+  left: 33px;
+  width: 322px;
+  height: 480px;
+  position: relative;
+  background: url(../img/app.jpg) no-repeat left top;
+}
+
+#demo .info {
+  width: 455px;
+  float: right;
+  margin-top: 112px;
+}
+
+#demo .info h3 {
+  color: #000000;
+  font-size: 38px;
+  margin: 0px;
+  text-align: center;
+  text-shadow: 0px 1px 0px #ec6375;
+  font-family: 'KlavikaLight-OSF';
+}
+
+.info ul {
+  width: 455px;
+  padding: 0;
+}
+
+.info ul li, .info ul li a {
+  float: left;
+}
+
+.info ul li a {
+  width: 217px;
+  color: #333333;
+  font-size: 20px;
+  padding: 10px 0;
+  text-align: center;
+  font-family: 'KlavikaMedCaps-SC';
+  background-color: #fee003;
+}
+
+.info ul li a + div {
+  float: left;
+  width: 100%;
+}
+
+.info ul li .note {
+  color: #FFFFFF;
+  font-size: 17px;
+  line-height: 23px;
+  margin: 18px 0 0;
+  font-family: 'KlavikaRegular-OSF';
+}
+
+.info ul li .points {
+  margin: 18px 0;
+}
+
+.info ul li .points li {
+  color: #eeeeee;
+  font-size: 14px;
+  padding: 3px 5px;
+  float: none;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #d81d37;
+  margin-bottom: 5px;
+  border: 1px solid #E52A44;
+}
+
+.info .actions {
+  overflow: hidden;
+  width: 455px;
+}
+
+.info .actions a {
+  color: #7a7a7a;
+  float: left;
+  width: 201px;
+  height: 68px;
+  line-height: 62px;
+  font-size: 18px;
+  text-align: center;
+  text-shadow: 0px -1px 0px #ffffff;
+  font-family: 'KlavikaBold-Bold';
+  background: url(../img/actionLnkBkg.png) no-repeat left top;
+}
+
+.info .actions > a:first-child {
+  margin-right: 20px;
+}
+
+.actions .pointer {
+  left: 407px;
+  top:520px;
+  width: 37px;
+  height: 49px;
+  position: absolute;
+  background: url(../img/leftArrow.png) no-repeat left top;
+}
+
+/*--working--*/
+
+#working {
+  border-bottom: 1px solid #dcdcdc;
+}
+
+#working h2 {
+  color: #333333;
+  margin: 36px 0 18px;
+  text-shadow: 0px 1px 0px #ffffff;
+}
+
+.note {
+  width: 860px;
+  font-size: 22px;
+  color: #555555;
+  line-height: 28px;
+  margin: 0 auto;
+}
+
+#working .details {
+  width: 860px;
+  margin: 0 auto 36px;
+}
+
+#working .details ul {
+  float: left;
+  width: 409px;
+  padding: 0;
+  text-align: center;
+}
+
+#working .details ul:first-child {
+  border-right: 1px solid #ccd9df;
+}
+
+#working .details li {
+  margin-bottom: 8px;
+  font-size: 15px;
+  list-style: disc inside none;
+}
+
+#working .details .heading {
+  color: #333333;
+  list-style: none;
+  font-size: 21px;
+  font-family: 'KlavikaMedCaps-SC';
+}
+
+/*--pricing--*/
+
+#pricing {
+  border-bottom: 1px solid #ffffff;
+  background: #f8f8f8 url();
+}
+
+#pricing h2 {
+  padding-top: 36px;
+  margin: 0px 0 18px 42px;
+  color: #333333;
+  text-shadow: 0px 1px 0px #ffffff;
+}
+
+#pricing .free {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+#pricing .free .icon {
+  width: 190px;
+  height: 63px;
+  margin: 0 auto;
+  background: url(../img/freecon.png) no-repeat center;
+}
+
+#pricing .free .heading {
+  font-size: 44px;
+  color: #333;
+  margin: 18px 0 0px
+}
+
+#pricing .free .note {
+  font-size: 18px;
+  color: #555;
+}
+
+#pricing .free .info {
+  color: #555;
+  font-size: 19px;
+  margin: 10px 0;
+  font-family: 'KlavikaBold-Bold';
+}
+
+#pricing .free a {
+  color: #cf5e13;
+  width: 231px;
+  display: block;
+  margin: 0 auto;
+  font-size: 22px;
+  padding: 9px 0;
+  border: 1px solid #efd303;
+  box-shadow: inset 0 1px 0 #FEE903,  0 1px 1px #d8d9da;
+}
+
+/*--roadmap--*/
+
+#roadmap {
+  width: 100%;
+  background: url(../img/blk-bkg.jpg) repeat left top;
+}
+
+#roadmap h2 {
+  padding-top: 36px;
+  margin: 0px 0 18px 0px;
+}
+
+#roadmap .note {
+  color: #cccccc;
+}
+
+#roadmap .set {
+  width: 860px;
+  margin: 18px auto 0;
+  padding-bottom: 18px;
+}
+
+.set .col {
+  width: 273px;
+  float: left;
+  margin: 0px;
+  padding: 0;
+  position: relative;
+  text-align: center;
+}
+
+.col .icon {
+  width: 100%;
+  height: 130px;
+  border: 1px solid #ffffff;
+  background-color: ;
+  background:#eeeeee url();
+}
+
+.col .icon span {
+  position: absolute;
+  width: 12px;
+  height: 10px;
+  left: 132px;
+  top: 131px;
+  background: url(../img/downArrow.png) no-repeat center top;
+}
+
+.col .heading {
+  color: #fefefe;
+  font-size: 22px;
+  margin: 18px 0 10px;
+  font-family: 'KlavikaRegCaps-SC';
+}
+
+.col li {
+  color: #888888;
+  font-size: 16px;
+}
+
+.set .middle {
+  margin: 0 17px;
+}
+
+
