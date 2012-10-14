@@ -10,6 +10,29 @@ User.prototype.authenticate = function(password) {
 };
 
 /*
+ * Add new User
+ */
+
+User.create = function(params, cb) {
+  var errors = "";
+  if(User.validate(params)) {
+    //add user to database
+    //cb(null, _user);
+  }
+  else {
+    // cb(errors, null);
+  }
+};
+
+/*
+ * Validate User
+ */
+
+User.validate = function(params) {
+  return true;
+};
+
+/*
  * Find by Id
  */
 

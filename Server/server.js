@@ -108,6 +108,8 @@ app.configure('development', function(){
 });
 
 app.get('/', homeController.index);
+app.get('/register', homeController.register);
+app.post('/register', homeController.addUser);
 
 app.get('/convert', convertorController.convert);
 app.get('/wait', convertorController.wait);

@@ -22,7 +22,7 @@ module.exports = function (passport) {
     
     "destroy" : function(req, res) {
       req.logout();
-      res.redirect('/');  
+      res.redirect('/');
     }
   };
 };
