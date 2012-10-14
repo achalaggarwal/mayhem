@@ -4,24 +4,32 @@ function sTID(s) { return app.stringIDToTypeID(s); };
 var JSONExporter = function(path){
   app.open(new File(path));
   this.originalRulerUnits = preferences.rulerUnits;
-  this.mainDoc            = app.activeDocument;
-  this.doc                = this.mainDoc.duplicate();
+  this.doc            = app.activeDocument;
+  // this.mainDoc            = app.activeDocument;
+  // this.doc                = this.mainDoc.duplicate();
 
-  var docFileName   = this.mainDoc.name.replace(/[:\/\\*\?\"\<\>\|\s]/g, "-");
-  this.folder       = new Folder(this.mainDoc.fullName.path +"/"+ docFileName +"-export");
-  var imagesFolder  = new Folder(this.folder.fullName +"/images");
+  // var docFileName   = this.mainDoc.name.replace(/\W+/g, '-');
+  // this.folder       = new Folder(this.mainDoc.fullName.path +"/"+ docFileName +"-export");
+  // var imagesFolder  = new Folder(this.folder.fullName +"/images");
 
-  if(!this.folder.exists) {
-    this.folder.create();
-  }
-  if(!imagesFolder.exists) {
-    imagesFolder.create();
-  }
+  // if(!this.folder.exists) {
+  //   this.folder.create();
+  // }
+  // if(!imagesFolder.exists) {
+  //   imagesFolder.create();
+  // }
 };
 
 JSONExporter.prototype.process = function(){
   preferences.rulerUnits = Units.PIXELS;
-  var traversed = this.traverse(this.doc.layers);
+  var dimentions = { width: parseInt(this.doc.width), height: parseInt(this.doc.height) };
+  this.cleanUpLayers(this.doc.layers);
+  this.traverse(this.doc.layers);
+
+  // this.doc.close(SaveOptions.DONOTSAVECHANGES);
+  return;
+
+  traversed = { dimentions: dimentions, layers: traversed };
   preferences.rulerUnits = this.originalRulerUnits;
   var file = new File(this.folder.fullName +"/out.json");
   file.open('w');
@@ -45,10 +53,12 @@ JSONExporter.prototype.guessControl = function(name){
     return "Switch";
   } else if (name.indexOf('bar') != -1) {
     return "NavigationBar";
+  } else if (name.indexOf('image') != -1) {
+    return "Image";
   } else {
-    return name;
+    return null;
   }
-}
+};
 
 JSONExporter.prototype.removeControlLayers = function(layer, helperLayer, helperDoc) {
   var _layer;
@@ -74,26 +84,35 @@ JSONExporter.prototype.removeControlLayers = function(layer, helperLayer, helper
   return _properties;
 };
 
-JSONExporter.prototype.traverse = function(layers){
-  var layer, index, parsed = {}, name, guessedName;
+// JSONExporter.prototype.traverse = function(layers){
+//   var layer, index, parsed = {}, name, guessedName;
 
-  for(var i = 1; i <= layers.length; ++i) {
-    index       = layers.length - i;
-    layer       = layers[index];
-    name        = layer.name.replace(/[:\/\\*\?\"\<\>\|]/g, "-");
-    guessedName = this.guessControl(name);
+//   for(var i = 1; i <= layers.length; ++i) {
+//     index       = layers.length - i;
+//     layer       = layers[index];
+//     name        = layer.name.replace(/\W+/g, '-');
+//     guessedName = this.guessControl(name);
 
-    if(layer.typename == "LayerSet" && guessedName != 'Button' && guessedName != 'Switch' && guessedName != 'NavigationBar' && guessedName != 'TextField') {
-      if (!parsed[name]) parsed[name] = [];
-      var a = this.traverse(layer.layers);
-      parsed[name] = parsed[name].concat(a);
-    } else {
-      if (!parsed['controls']) parsed['controls'] = [];
-      var a = this.render(layer, guessedName);
-      parsed['controls'] = parsed['controls'].concat(a);
-    }
-  }
-  return parsed;
+//     if(layer.typename == "LayerSet"
+//     && guessedName != 'Button'
+//     && guessedName != 'Switch'
+//     && guessedName != 'NavigationBar'
+//     && guessedName != 'TextField'
+//     && guessedName != 'Label') {
+//       if (!parsed[name]) parsed[name] = [];
+//       var a = this.traverse(layer.layers);
+//       parsed[name] = parsed[name].concat(a);
+//     } else {
+//       if (!parsed['controls']) parsed['controls'] = [];
+//       var a = this.render(layer, guessedName);
+//       parsed['controls'] = parsed['controls'].concat(a);
+//     }
+//   }
+//   return parsed;
+// };
+
+JSONExporter.prototype.renderLayer = function(layer) {
+
 };
 
 JSONExporter.prototype.render = function(layer, guessedName){
@@ -105,31 +124,47 @@ JSONExporter.prototype.render = function(layer, guessedName){
     app.activeDocument.activeLayer = layer;
 
     var outLayer = {
-      name: layer.name.replace(/[:\/\\*\?\"\<\>\|]/g, "-"),
-      type: null,
+      type: guessedName,
+      layer_name: layer.name.replace(/\W+/g, '-'),
       dimentions : {
-        left: layer.bounds[0].value,
-        top: layer.bounds[1].value,
-        width: layer.bounds[2].value - layer.bounds[0].value,
-        height: layer.bounds[3].value - layer.bounds[1].value,
+        left   : layer.bounds[0].value,
+        top    : layer.bounds[1].value,
+        width  : layer.bounds[2].value - layer.bounds[0].value,
+        height : layer.bounds[3].value - layer.bounds[1].value,
       }
     };
 
     if (layer.kind != LayerKind.TEXT) {
-      outLayer.type = "image";
 
       var helperDoc = this.doc.duplicate(),
         helperLayer = helperDoc.activeLayer;
 
-      if (guessedName == 'Button' || guessedName == 'TextField' || guessedName == 'NavigationBar') {
-        outLayer.content = this.removeControlLayers(layer, helperLayer, helperDoc);
+      if (guessedName == 'Button'
+          || guessedName == 'TextField'
+          || guessedName == 'NavigationBar'
+          || guessedName == 'Label') {
+        outLayer.text = this.removeControlLayers(layer, helperLayer, helperDoc);
       }
 
       // we'll trim later. I had some files with transparent layer-edges which aren't very
       // helpful. I need to crop as well, since there are some problems with trimming and
       // resulting layer-bounds.
-      helperDoc.crop(layer.bounds);
+      var _remove = [];
+      for(var i = 0; i < helperDoc.layers.length; i++) {
+        var _layer = helperDoc.layers[i];
+        if (_layer.bounds[0].value != helperLayer.bounds[0].value
+          || _layer.bounds[1].value != helperLayer.bounds[1].value
+          || _layer.bounds[2].value != helperLayer.bounds[2].value
+          || _layer.bounds[3].value != helperLayer.bounds[3].value)
+          _remove.push(_layer);
+      }
+      for (var i in _remove) {
+        try {
+          _remove[i].remove();
+        } catch (ex) {}
+      }
 
+      helperDoc.crop(layer.bounds);
 
       var desc = new ActionDescriptor();
       desc.putEnumerated(sTID("trimBasedOn"), sTID("trimBasedOn"), cTID("Trns"));
@@ -138,6 +173,7 @@ JSONExporter.prototype.render = function(layer, guessedName){
       desc.putBoolean(cTID("Top "), true);
       desc.putBoolean(cTID("Rght"), false);
       desc.putBoolean(cTID("Btom"), false);
+
       try {
         executeAction(sTID("trim"), desc, DialogModes.NO);
       } catch(e) {}
@@ -145,10 +181,16 @@ JSONExporter.prototype.render = function(layer, guessedName){
       outLayer.dimentions.left += outLayer.dimentions.width - helperDoc.width.value;
       outLayer.dimentions.top += outLayer.dimentions.height - helperDoc.height.value;
 
+      if (outLayer.text && outLayer.text.dimentions) {
+        outLayer.text.dimentions.left -= outLayer.dimentions.left;
+        outLayer.text.dimentions.top -= outLayer.dimentions.top;
+      }
+
       desc.putBoolean(cTID("Left"), false);
       desc.putBoolean(cTID("Top "), false);
       desc.putBoolean(cTID("Rght"), true);
       desc.putBoolean(cTID("Btom"), true);
+
       try {
         executeAction(sTID("trim"), desc, DialogModes.NO);
       } catch(e) {}
@@ -156,15 +198,15 @@ JSONExporter.prototype.render = function(layer, guessedName){
       outLayer.dimentions.width = helperDoc.width.value;
       outLayer.dimentions.height = helperDoc.height.value;
 
-      var imgRelPath         = "images/" + outLayer.name + ".png";
+      var imgRelPath         = "images/" + outLayer.layer_name + ".png";
       outLayer.path          = this.folder.fullName + "/" + imgRelPath;
       var saveOptions        = new PNGSaveOptions;
       saveOptions.interlaced = false;
 
       helperDoc.saveAs(new File(outLayer.path), saveOptions, true, Extension.LOWERCASE);
       helperDoc.close(SaveOptions.DONOTSAVECHANGES);
+
     } else if (layer.kind == LayerKind.TEXT) {
-      outLayer.type = "text";
 
       var ranges = [];
       var range;
@@ -179,54 +221,46 @@ JSONExporter.prototype.render = function(layer, guessedName){
       var desc = executeActionGet(ref);
       var list = desc.getObjectValue(cTID("Txt "));
       var tsr = list.getList(cTID("Txtt"));
+      var tsr0 = tsr.getObjectValue(0);
 
-      for (var i = 0; i < tsr.count; i++) {
-        var tsr0        = null;
-        var textStyle   = null;
-        var color       = null;
-        var autoLeading = null;
-        var size        = null;
-        var leading     = null;
-        var text        = null;
-        var font        = null;
-        var red         = null;
-        var blue        = null;
-        var green       = null;
-        var fill        = null;
+      var textStyle   = null;
+      var color       = null;
+      var autoLeading = null;
+      var size        = null;
+      var leading     = null;
+      var text        = null;
+      var font        = null;
+      var red         = null;
+      var blue        = null;
+      var green       = null;
 
-        try { tsr0        = tsr.getObjectValue(i); } catch(ex){}
-        try { textStyle   = tsr0.getObjectValue(cTID("TxtS")); } catch(ex){}
-        try { color       = textStyle.getObjectValue(cTID("Clr ")); } catch(ex){}
-        try { autoLeading = textStyle.getBoolean(sTID("autoLeading")); } catch(ex){}
-        try { size        = parseInt(textStyle.getUnitDoubleValue(cTID("Sz  ", pts))); } catch(ex){}
-        try { leading     = autoLeading ? false : textStyle.getUnitDoubleValue(cTID("Ldng")); } catch(ex){}
-        try { text        = ti.contents; } catch(ex){}
-        try { font        = textStyle.getString(cTID("FntN")); } catch(ex){}
-        try { red         = color.getInteger(cTID("Rd  ")); } catch(ex){}
-        try { blue        = color.getInteger(cTID("Bl  ")); } catch(ex){}
-        try { green       = color.getInteger(cTID("Grn ")); } catch(ex){}
-        try { fill        = textStyle.getString(cTID("Fl  ")); } catch(ex){}
+      try { textStyle   = tsr0.getObjectValue(cTID("TxtS")); } catch(ex){}
+      try { color       = textStyle.getObjectValue(cTID("Clr ")); } catch(ex){}
+      try { autoLeading = textStyle.getBoolean(sTID("autoLeading")); } catch(ex){}
+      try { size        = parseInt(textStyle.getUnitDoubleValue(cTID("Sz  ", pts))); } catch(ex){}
+      try { leading     = autoLeading ? false : textStyle.getUnitDoubleValue(cTID("Ldng")); } catch(ex){}
+      try { text        = ti.contents; } catch(ex){}
+      try { font        = textStyle.getString(cTID("FntN")); } catch(ex){}
+      try { red         = color.getInteger(cTID("Rd  ")); } catch(ex){}
+      try { blue        = color.getInteger(cTID("Bl  ")); } catch(ex){}
+      try { green       = color.getInteger(cTID("Grn ")); } catch(ex){}
 
-        var details = {
-          red   : red,
-          blue  : blue,
-          green : green,
-          size  : size,
-          text  : text,
-          font  : font,
-          fill  : fill
-        };
+      var details = {
+        red   : red || 0,
+        blue  : blue || 0,
+        green : green || 0,
+        size  : size,
+        text  : text,
+        font  : font || 'Helvetica'
+      };
 
-        ranges.push(details);
+      if (size > maxFontSize) {
+        maxFontSize = size;
+      }
 
-        if (size > maxFontSize) {
-          maxFontSize = size;
-        }
-
-        if (!autoLeading) {
-          if (leading > maxLineHeight) {
-            maxLineHeight = leading;
-          }
+      if (!autoLeading) {
+        if (leading > maxLineHeight) {
+          maxLineHeight = leading;
         }
       }
 
@@ -243,10 +277,13 @@ JSONExporter.prototype.render = function(layer, guessedName){
         outLayer.dimentions.line_height = outLayer.dimentions.height;
       }
 
-      outLayer.content = ranges;
+      outLayer.details = details;
     } else {
       //#TODO
     }
+
+    if (outLayer.dimentions.left < 0) outLayer.dimentions.left = 0;
+    if (outLayer.dimentions.top < 0) outLayer.dimentions.top = 0;
 
     layer.visible = false;
 
@@ -256,9 +293,80 @@ JSONExporter.prototype.render = function(layer, guessedName){
   return {};
 }
 
+JSONExporter.prototype.cleanUpLayers = function(layers) {
+  var _layer;
+  var _mergeLayers = [];
+
+  for(var i = 0; i < layers.length; i++) {
+    _layer = layers[i];
+
+    if (_layer.typename == "LayerSet") {
+      this.mergeLayers(_layer.layers);
+    } else {
+      var controlName = this.guessControl(_layer.name);
+      if (!controlName && _layer.kind != LayerKind.TEXT) {
+        _mergeLayers.push(_layer);
+      }
+    }
+  }
+
+  if (_mergeLayers.length > 0) {
+    var newLayer = layers.parent.layerSets.add();
+
+    if (_mergeLayers.length === 1) {
+      newLayer.name = _mergeLayers[0].name;
+    }
+
+    if (newLayer.parent.layers.length > 1) {
+      newLayer.move(newLayer.parent.layers[newLayer.parent.layers.length-1], ElementPlacement.PLACEAFTER);
+    }
+
+    for(var i in _mergeLayers) {
+      _layer = _mergeLayers[i];
+      _layer.move(newLayer, ElementPlacement.INSIDE);
+    }
+
+    newLayer.merge();
+  }
+}
+
+JSONExporter.prototype.filterLayers = function(layers){
+  var _layer;
+
+  for(var i = 0; i < layers.length; i++) {
+    _layer = layers[i];
+  }
+};
+
+JSONExporter.prototype.traverse = function(layers) {
+  var layer, index, parsed = {}, name;
+
+  for(var i = 1; i <= layers.length; ++i) {
+    index = layers.length - i;
+    layer = layers[index];
+    name  = layer.name.replace(/\W+/g, '-');
+
+    if(layer.typename == "LayerSet") {
+      app.activeDocument = this.doc;
+      layer.visible = true;
+      app.activeDocument.activeLayer = layer;
+
+      var helperDoc = this.doc.duplicate(),
+        helperLayer = helperDoc.activeLayer;
+
+      this.filterLayers(helperLayer.layers);
+    } else {
+
+    }
+  }
+
+  return {};
+};
+
 function main() {
-  var exporter = new JSONExporter("~/Desktop/photoshop/source.psd");
+  var exporter = new JSONExporter("~/Desktop/photoshop/source1.psd");
   exporter.process();
+  return true;
 }
 
 main();
