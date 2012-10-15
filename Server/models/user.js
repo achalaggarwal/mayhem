@@ -175,7 +175,7 @@ User.find(function(err, users) {
     var salt = randomSalt();
     var baseUsers = [
                       { username: 'bob', passwordHash: md5('secret' + salt), salt: salt, email: 'admin@domain.com' }
-                    , { username: 'joe', passwordHash: md5('birthday' + salt), salt: salt, email: 'admin@domain.com' } 
+                    , { username: 'joe', passwordHash: md5('birthday' + salt), salt: salt, email: 'admin@domain.com' }
                     ];
     
     for (var i = baseUsers.length - 1; i >= 0; i--) {

@@ -2,17 +2,32 @@
 <% if (message) { %>
 <p><%= message %></p>
 <% } %>
-<form action="/login" method="post">
-  <div>
-  <label>Username:</label>
-  <input type="text" name="username"/><br/>
+
+<div class="header">
+  <div id="logo">Logo</div>
+</div>
+<div class="main">
+  <div id="login" class="layout">
+    <div class="sampleApp">
+      <div>&nbsp;</div>
+    </div>
+    <div class="actionForm">
+      <div class="holder clear">
+        <h3>Sign In</h3>
+        <a href="/register" class="bttn">Create an Account</a>
+      </div>
+      <p class="note">
+        Pellentesque habitant morbi tristique senectus et netus et
+        malesuada fames ac turpis egestas. Vestibulum tortor quam
+      </p>
+      <form action="/login" method="post" id="" >
+        <input type="text" value="Username" class="inputField" name="username" />
+        <input type="password" value="Password" class="inputField" name="password" />
+        <input type="submit" value="Sign In " class="ybttn submitBttn" />
+      </form>
+    </div>
   </div>
-  <div>
-  <label>Password:</label>
-  <input type="password" name="password"/>
-  </div>
-  <div>
-  <input type="submit" value="Submit"/>
-  </div>
-</form>
-<p><small>Hint - bob:secret</small></p>
+</div>
+<footer>
+
+</footer>

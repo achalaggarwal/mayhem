@@ -10,10 +10,10 @@ db.on('error', console.error.bind(console, 'connection error:'));
  */
 
 var userSchema = new mongoose.Schema({
-  username: String,
+  username: {type: String},
   passwordHash: String,
   salt: String,
-  email: String,
+  email: {type: String},
   jobs: [{type: mongoose.Schema.Types.ObjectId, ref: 'Job'}]
 });
 

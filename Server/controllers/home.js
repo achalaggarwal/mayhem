@@ -11,7 +11,7 @@ exports.index = function(req, res){
  * GET Register Page
  */
 
-exports.register = function(req, res){
+exports.register = function(req, res){  
   res.render('home/register', { title: 'Register', message: req.flash('error') });
 };
 
@@ -24,10 +24,8 @@ exports.addUser = function(req, res) {
     }
     else {
       console.log(user);
-      // req.login(user);
-      res.redirect('/convert');
+      res.redirect('/login');
     }
-  
   });
 
 };
