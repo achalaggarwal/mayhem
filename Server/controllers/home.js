@@ -16,12 +16,18 @@ exports.register = function(req, res){
 };
 
 exports.addUser = function(req, res) {
-  var email = req.body.email;
-  var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-  if (!filter.test(email)) {
-    res.render('home/register', { title: 'Register', message: 'Please provide a valid email address'});
-    return;
-  }
   
-  res.redirect("/login");
+  User.create(req.body, function(err, user) {
+    if (err && err.length > 0) {
+      res.render('home/register', { title: 'Register', message: err.join()});
+      return;
+    }
+    else {
+      console.log(user);
+      // req.login(user);
+      res.redirect('/convert');
+    }
+  
+  });
+
 };

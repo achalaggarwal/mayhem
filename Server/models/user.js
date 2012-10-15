@@ -14,22 +14,93 @@ User.prototype.authenticate = function(password) {
  */
 
 User.create = function(params, cb) {
-  var errors = "";
-  if(User.validate(params)) {
-    //add user to database
-    //cb(null, _user);
-  }
-  else {
-    // cb(errors, null);
-  }
+  User.validate(params, function(err) {
+    if(err.length > 0) {
+      cb(err, null);
+    }
+    else {
+      User.available(params, function(err) {
+        if(err) {
+          cb(err, null);
+        }
+        else {
+          var salt = randomSalt();
+          var userData =  {
+                            username: params.username,
+                            passwordHash: md5(params.password + salt),
+                            salt: salt,
+                            email: params.email
+                          };
+    
+          var _user = new User(userData);
+          _user.save(function (err) {
+            if (err) {
+              console.log(err);
+              cb(err, null);
+            }
+            else {
+              console.log(_user.username + " added!");
+              cb(null, _user);
+            }
+          });
+        }
+      });
+    }
+  });
+};
+
+/*
+ * Check availability
+ */
+ 
+User.available = function(params, cb) {
+  User.findByUsername(params.username, function(err, user) {
+    if(user) {
+      cb(["Username is already used"]);
+    }
+    else {
+      //validate everything else
+      User.findByEmail(params.email, function(err, user) {
+        if(user) {
+          cb(["Email is already used"]);
+        }
+        else {
+          cb(null);
+        }
+      });
+    }
+  });
 };
 
 /*
  * Validate User
  */
 
-User.validate = function(params) {
-  return true;
+User.validate = function(params, cb) {
+  var err = [];
+  
+  if(!params.hasOwnProperty('username') || params.username.length === 0) {
+    err.push("Username is missing");
+  }
+  
+  if (!params.hasOwnProperty('password') || params.password.length === 0) {
+    err.push("Password is missing");
+  }
+  
+  if (!params.hasOwnProperty('email') || params.email.length === 0) {
+    err.push("Email is missing");
+  }
+  else {
+    //email validation
+    var email = params.email;
+    var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    
+    if (!filter.test(email)) {
+      err.push('Email is invalid');
+    }
+  }
+
+  cb(err);
 };
 
 /*
@@ -58,6 +129,20 @@ User.findByUsername = function(username, cb) {
       return;
     }
     
+    cb(null, _user);
+  });
+};
+
+/*
+ * Find by Email
+ */
+
+User.findByEmail = function(email, cb) {
+  User.findOne({ 'email': email }, function (err, _user) {
+    if (err) {
+      cb(null, null);
+      return;
+    }
     cb(null, _user);
   });
 };
