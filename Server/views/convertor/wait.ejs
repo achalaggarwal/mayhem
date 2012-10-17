@@ -21,19 +21,23 @@
 
 <script type="text/javascript">
 
-  for (var i = _jobs.length - 1; i >= 0; i--) {
-    
-    var id = _jobs[i].id;
-     var timer = setInterval(function() {
-      $.ajax({
-        type: 'POST',
-        url: '/status',
-        data: {id: id},
-        success: function(data) {console.info(data)}
-      });
-     }, 1000);
-    
-    _jobs[i].timer = timer;
-  };
+function updateStatus(id, message) {
+  var selector = "#" + id + " span.status";
+  $(selector).text(message);
+}
+
+function sendRequest(id) {
+  $.ajax({
+      type: 'POST',
+      url: '/status',
+      data: {id: id},
+      success: function(data) { $('body').append(data); }
+    });
+}
+
+for (var i = _jobs.length - 1; i >= 0; i--) { 
+  var id = _jobs[i].id;
+  sendRequest(id);
+}
 
 </script>

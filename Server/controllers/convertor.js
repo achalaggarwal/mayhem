@@ -42,17 +42,16 @@ exports.status = function(req, res){
   }
   
   if (!jobFound) {
-    res.redirect('/login');
+    res.render('ajaxRedirect', {url: '/login'});
     return;
   }
 
   Job.find({_id: req.body.id}, function(err, jobs) {
     if (err) {
-      console.log(err);
-      res.redirect('/login');
+      res.render('ajaxRedirect', {url: '/login'});
     }
     else {
-      res.send(jobs[0].statusMessage());
+      res.render('convertor/status', {job: jobs[0]});
     }
   });
 };
