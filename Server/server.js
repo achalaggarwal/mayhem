@@ -113,7 +113,7 @@ app.post('/register', homeController.addUser);
 
 app.get('/convert', convertorController.convert);
 app.get('/wait', convertorController.wait);
-app.get('/status', convertorController.status);
+app.post('/status', convertorController.status);
 app.post('/upload', convertorController.upload);
 
 app.get('/login', sessionsController.login);

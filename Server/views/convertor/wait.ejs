@@ -3,11 +3,37 @@
 <p>Welcome to <%= title %></p>
 
 <script type="text/javascript">
-setInterval(function() {
-  $.ajax({
-      type: 'GET',
-      url: '/status',
-      success: function(data) { console.log(data)},
-    });
-}, 1000);
+ var _jobs = [];
+</script>
+
+<% if(jobs.length > 0) { %>
+<div id="jobs">
+  <% for (var i = jobs.length - 1; i >= 0; i--) { %>
+    <div id="<%= jobs[i]._id %>">
+      <span><%= jobs[i].filename %></span>
+      <span><%= jobs[i].created_at %></span>
+      <span class="status"><%= jobs[i].status %></span>
+      <script type="text/javascript">_jobs.push({id: "<%= jobs[i].id %>"});</script>
+    </div>
+  <% } %>
+</div>
+<% } %>
+
+<script type="text/javascript">
+
+  for (var i = _jobs.length - 1; i >= 0; i--) {
+    
+    var id = _jobs[i].id;
+     var timer = setInterval(function() {
+      $.ajax({
+        type: 'POST',
+        url: '/status',
+        data: {id: id},
+        success: function(data) {console.info(data)}
+      });
+     }, 1000);
+    
+    _jobs[i].timer = timer;
+  };
+
 </script>
