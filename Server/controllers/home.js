@@ -11,8 +11,8 @@ exports.index = function(req, res){
  * GET Register Page
  */
 
-exports.register = function(req, res){  
-  res.render('home/register', { title: 'Register', message: req.flash('error') });
+exports.register = function(req, res){ 
+  res.render('home/register', { title: 'Register', message: req.flash('error'), object: req.session['object'] });
 };
 
 exports.addUser = function(req, res) {

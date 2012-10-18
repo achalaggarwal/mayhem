@@ -1,17 +1,34 @@
 /*
+ * Private Create Job Method
+ */
+ 
+var createJob = function(req, res, object) {
+  var currentUser = req.user;
+    Job.create({url: object.url, filename: object.data.filename, owner: currentUser}, function(err, job) {
+      if(err){
+        console.log(err);
+      }
+      else {
+        currentUser.jobs.push(job);
+        currentUser.save(function(err) {
+          if(err) console.log(err);
+        });
+      }
+    });
+    res.render('ajaxRedirect', {url: '/wait'});
+};
+
+/*
  * GET convert page.
  */
 
 exports.convert = function(req, res){
-  
-  var currentUser = req.user;
-  
-  Job.find({owner: currentUser}, function(err, jobs) {
-    if (err) console.log(err);
-    console.log(jobs);
-  });
-  
-  // console.log(currentUser.jobs[0].filePath);
+  if (req.session['object']) {
+    createJob(req, res, req.session['object']);
+    req.session['object'] = null;
+    return;
+  }
+
   res.render('convertor/convert', { title: 'Convert' , user: req.user});
 };
 
@@ -61,27 +78,13 @@ exports.status = function(req, res){
  */
 
 exports.upload = function(req, res){
+  console.log(req.body);
   if (req.isAuthenticated()) {
-    console.log(req.body);
-    
-    var currentUser = req.user;
-    Job.create({url: req.body.url, filename: req.body.data.filename, owner: currentUser}, function(err, job) {
-      if(err){
-        console.log(err);
-      }
-      else {
-        currentUser.jobs.push(job);
-        currentUser.save(function(err) {
-          if(err) console.log(err);
-          console.log(currentUser);
-        });
-      }
-    });
-    res.send('/wait');
+    createJob(req, res, req.body);
   }
   else {
-    //if not logged in,
-    //create new job and store it in cookie
-    res.send('/login');
+    //if not logged in
+    req.session['object'] = req.body;
+    res.render('ajaxRedirect', {url: '/login'});
   }
 };

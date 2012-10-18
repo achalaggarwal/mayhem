@@ -5,7 +5,7 @@ module.exports = function (passport) {
      */
      
     "login" : function(req, res) {
-      res.render('sessions/login', { title: 'Login' , user: req.user, message: req.flash('error')});
+      res.render('sessions/login', { title: 'Login' , user: req.user, message: req.flash('error'), object: req.session['object']});
     },
     
     /*

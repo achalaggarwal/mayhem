@@ -57,11 +57,10 @@ passport.use(new LocalStrategy(
 ));
 
 var authenticatedRoutes = {
-                              "/upload" : 1
-                            , "/convert" : 1
-                            , "/wait" : 1
-                            , "/status" : 1
-                            , "/sessions" : 1
+                            "/convert"  : 1
+                          , "/wait"     : 1
+                          , "/status"   : 1
+                          , "/sessions" : 1
                           };
 
 var app = express();
