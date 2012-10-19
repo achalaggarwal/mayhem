@@ -1,5 +1,53 @@
 var crypto = require('crypto');
+var SendGrid = require('sendgrid').SendGrid;
+
+/*
+ * User Reset Account
+ */
+
+User.resetAccount = function(email, cb) {
+  if (validEmail(email)) {
+    User.findByEmail(email, function(err, user) {
+      if (err) { cb("Email address is not found."); return;}
+      user.randomPassword();
+      cb("The new password has been emailed to you");
+    });
+  }
+  else {
+    cb("Email address is invalid");
+  }
+};
+
+/*
+ * User set Random Password
+ */
+ 
+ User.prototype.randomPassword = function() {
   
+  var me = this;
+  var salt = me.salt;
+  var newPassword = randomString(8);
+  
+  me.passwordHash = md5(newPassword + salt);
+  me.save(function(err) {
+    if (err) {
+      return;
+    }
+    //send new password in email
+    var sendgrid = new SendGrid('bhaveshdhupar', '~bhavesh');
+    sendgrid.send({
+      to: me.email,
+      from: 'support@kinesis.io',
+      subject: 'Account Password Reset Request',
+      text: 'You account password has been reset. The new password is ' + newPassword
+    }, function(success, message) {
+        if (!success) {
+          console.log(message);
+        }
+    });
+  });
+ };
+
 /*
  * User authenticate
  */
@@ -73,6 +121,15 @@ User.available = function(params, cb) {
 };
 
 /*
+ * Validate Email
+ */
+
+var validEmail = function(email) {
+  var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+  return filter.test(email);
+};
+
+/*
  * Validate User
  */
 
@@ -92,10 +149,7 @@ User.validate = function(params, cb) {
   }
   else {
     //email validation
-    var email = params.email;
-    var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-    
-    if (!filter.test(email)) {
+    if (!validEmail(params.email)) {
       err.push('Email is invalid');
     }
   }
@@ -156,11 +210,19 @@ var md5 = function(input) {
 };
 
 /*
+ * Generate Random String of length
+ */
+ 
+var randomString = function(length) {
+  return Math.random().toString(36).substr(2, Math.min(length, 16));
+};
+
+/*
  * Generate Random Salt string
  */
 
 var randomSalt = function() {
-  return Math.random().toString(36).substr(2, 5);
+  return randomString(5);
 };
 
 /*

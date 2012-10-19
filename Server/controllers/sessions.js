@@ -17,6 +17,22 @@ module.exports = function (passport) {
     },
     
     /*
+     * GET Reset Password Form
+     */
+    "resetPassword" : function(req, res) {
+      res.render('sessions/reset_password', {title: 'Reset Password', message: null});
+    },
+    
+    /*
+     * POST Reset Account Password
+     */
+    "generatePassword" : function(req, res) {
+      User.resetAccount(req.body.email, function(message) {
+        res.render('sessions/reset_password', {title: 'Reset Password', message: message});
+      });
+    },
+    
+    /*
      * GET logout
      */
     
