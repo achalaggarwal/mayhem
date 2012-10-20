@@ -22,31 +22,48 @@ User.resetAccount = function(email, cb) {
  * User set Random Password
  */
  
- User.prototype.randomPassword = function() {
-  
+User.prototype.randomPassword = function() {
+  this.updatePassword(randomString(8), function(err, success) {
+    if (success) {
+      //send new password in email
+      var sendgrid = new SendGrid('bhaveshdhupar', '~bhavesh');
+      sendgrid.send({
+        to: me.email,
+        from: 'support@kinesis.io',
+        subject: 'Account Password Reset Request',
+        text: 'You account password has been reset. The new password is ' + newPassword
+      }, function(success, message) {
+        if (!success) {
+          console.log(message);
+        }
+      });
+    }
+  });
+};
+
+/*
+ * User Update Password
+ */
+
+User.prototype.updatePassword = function(password, cb) {
   var me = this;
   var salt = me.salt;
-  var newPassword = randomString(8);
+  var newPassword = password;
+  
+  if (newPassword.length < 5) {
+    cb("Password should be at least than 5 characters", false);
+    return;
+  }
   
   me.passwordHash = md5(newPassword + salt);
   me.save(function(err) {
     if (err) {
+      cb(err, false);
       return;
     }
-    //send new password in email
-    var sendgrid = new SendGrid('bhaveshdhupar', '~bhavesh');
-    sendgrid.send({
-      to: me.email,
-      from: 'support@kinesis.io',
-      subject: 'Account Password Reset Request',
-      text: 'You account password has been reset. The new password is ' + newPassword
-    }, function(success, message) {
-        if (!success) {
-          console.log(message);
-        }
-    });
+    cb(null, true);
   });
- };
+};
 
 /*
  * User authenticate
@@ -140,8 +157,16 @@ User.validate = function(params, cb) {
     err.push("Username is missing");
   }
   
+  if (params.password.username < 5) {
+    err.push("Username should be at least than 5 characters");
+  }
+  
   if (!params.hasOwnProperty('password') || params.password.length === 0) {
     err.push("Password is missing");
+  }
+  
+  if (params.password.length < 5) {
+    err.push("Password should be at least than 5 characters");
   }
   
   if (!params.hasOwnProperty('email') || params.email.length === 0) {

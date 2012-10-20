@@ -33,6 +33,35 @@ module.exports = function (passport) {
     },
     
     /*
+     * GET Account Page
+     */
+    
+    "account" : function(req, res) {
+      res.render('sessions/account', { title: 'Account Management', message: null , user: req.user});
+    },
+    
+    /*
+     * POST Account Page
+     */
+    
+    "updateAccount" : function(req, res) {
+      //update the password for current user
+      console.log(req.body);
+      if (req.body.password) {
+        var currentUser = req.user;
+        currentUser.updatePassword(req.body.password, function(err, success) {
+          if (success)
+            res.render('sessions/account', { title: 'Account Management', message: "Account has been updated.", user: req.user});
+          else
+            res.render('sessions/account', { title: 'Account Management', message: err, user: req.user});
+        });
+      }
+      else {
+        res.render('sessions/account', { title: 'Account Management', message: null , user: req.user});
+      }
+    },
+    
+    /*
      * GET logout
      */
     

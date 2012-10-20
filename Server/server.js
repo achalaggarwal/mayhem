@@ -61,6 +61,7 @@ var authenticatedRoutes = {
                           , "/wait"     : 1
                           , "/status"   : 1
                           , "/sessions" : 1
+                          , "/account"  : 1
                           };
 
 var app = express();
@@ -118,6 +119,9 @@ app.post('/upload', convertorController.upload);
 app.get('/login', sessionsController.login);
 app.get('/reset_password', sessionsController.resetPassword);
 app.post('/reset_password', sessionsController.generatePassword);
+
+app.get('/account', sessionsController.account);
+app.post('/account', sessionsController.updateAccount);
 
 app.post('/login', sessionsController.create);
 app.get('/logout', sessionsController.destroy);
