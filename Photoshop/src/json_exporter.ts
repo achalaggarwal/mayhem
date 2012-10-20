@@ -106,13 +106,14 @@ class JSONExporter {
     } catch(e) {}
   }
 
-  saveLayer(layer, doc, name) {
+  saveLayerAndClose(layer, doc, name) {
     var imgRelPath         = "images/" + name + ".png";
     layer.path             = this.folder.fullName + "/" + imgRelPath;
     var saveOptions        = new PNGSaveOptions;
     saveOptions.interlaced = false;
 
     doc.saveAs(new File(layer.path), saveOptions, true, Extension.LOWERCASE);
+    doc.close(SaveOptions.DONOTSAVECHANGES);
 
     return layer.path;
   }
@@ -232,9 +233,7 @@ class JSONExporter {
         outLayer.dimentions.width  = helperDoc.width.value;
         outLayer.dimentions.height = helperDoc.height.value;
 
-        outLayer.image = this.saveLayer(helperLayer, helperDoc, outLayer.layer_name);
-
-        helperDoc.close(SaveOptions.DONOTSAVECHANGES);
+        outLayer.image = this.saveLayerAndClose(helperLayer, helperDoc, outLayer.layer_name);
       }
 
       if (outLayer.dimentions.left < 0) outLayer.dimentions.left = 0;
