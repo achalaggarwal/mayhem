@@ -62,6 +62,7 @@ var authenticatedRoutes = {
                           , "/status"   : 1
                           , "/sessions" : 1
                           , "/account"  : 1
+                          , "/logout"   : 1
                           };
 
 var app = express();
