@@ -1,0 +1,17 @@
+
+<% layout('../layout') -%>
+<% if (message) { %>
+<p><%= message %></p>
+<% } %>
+
+<h1>Account Management</h1>
+
+Email: <%= user.email %><br />
+Member Since: <%= user.created_at %><br />
+Credits: <%= user.credits %><br />
+
+<form method="POST" action="/account">
+<label>New Password</label>
+<input name="password" type="password" />
+<input type="submit" />
+</form>
