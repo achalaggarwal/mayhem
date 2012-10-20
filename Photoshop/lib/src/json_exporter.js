@@ -20,7 +20,9 @@ var JSONExporter = (function () {
     }
     JSONExporter.prototype.process = function () {
         this.preferences.rulerUnits = Units.PIXELS;
-        var dimentions = {
+        var dimensions = {
+            top: 0,
+            left: 0,
             width: parseInt(this.doc.width),
             height: parseInt(this.doc.height)
         };
@@ -29,8 +31,8 @@ var JSONExporter = (function () {
         this.doc.close(SaveOptions.DONOTSAVECHANGES);
         this.mainDoc.close(SaveOptions.DONOTSAVECHANGES);
         traversed = {
-            dimentions: dimentions,
-            layers: traversed
+            dimensions: dimensions,
+            objects: traversed
         };
         this.preferences.rulerUnits = this.originalRulerUnits;
         var file = new File(this.folder.fullName + "/out.json");
@@ -72,6 +74,14 @@ var JSONExporter = (function () {
                 }
             }
         }
+    };
+    JSONExporter.prototype.isControl = function (name) {
+        var guessedName = this.guessControl(name);
+        return this.isControlWithText(name) || guessedName == 'Switch';
+    };
+    JSONExporter.prototype.isControlWithText = function (name) {
+        var guessedName = this.guessControl(name);
+        return guessedName == 'Button' || guessedName == 'Switch' || guessedName == 'NavigationBar' || guessedName == 'TextField' || guessedName == 'Label' || guessedName == 'Image' || guessedName == 'Background';
     };
     JSONExporter.prototype.removeControlLayers = function (layer, helperLayer, helperDoc) {
         var _layer;
@@ -116,12 +126,13 @@ var JSONExporter = (function () {
         } catch (e) {
         }
     };
-    JSONExporter.prototype.saveLayer = function (layer, doc, name) {
+    JSONExporter.prototype.saveLayerAndClose = function (layer, doc, name) {
         var imgRelPath = "images/" + name + ".png";
         layer.path = this.folder.fullName + "/" + imgRelPath;
         var saveOptions = new PNGSaveOptions();
         saveOptions.interlaced = false;
         doc.saveAs(new File(layer.path), saveOptions, true, Extension.LOWERCASE);
+        doc.close(SaveOptions.DONOTSAVECHANGES);
         return layer.path;
     };
     JSONExporter.prototype.render = function (layer, guessedName) {
@@ -133,7 +144,7 @@ var JSONExporter = (function () {
             var outLayer = {
                 type: guessedName,
                 layer_name: layer.name.replace(/\W+/g, '-'),
-                dimentions: {
+                dimensions: {
                     left: layer.bounds[0].value,
                     top: layer.bounds[1].value,
                     width: layer.bounds[2].value - layer.bounds[0].value,
@@ -219,13 +230,13 @@ var JSONExporter = (function () {
                         maxLineHeight = leading;
                     }
                 }
-                if(maxLineHeight > outLayer.dimentions.height) {
-                    outLayer.dimentions.top += (outLayer.dimentions.height - maxLineHeight) / 2;
-                    outLayer.dimentions.line_height = maxLineHeight;
-                    outLayer.dimentions.height = maxLineHeight;
+                if(maxLineHeight > outLayer.dimensions.height) {
+                    outLayer.dimensions.top += (outLayer.dimensions.height - maxLineHeight) / 2;
+                    outLayer.dimensions.line_height = maxLineHeight;
+                    outLayer.dimensions.height = maxLineHeight;
                 } else {
-                    if(outLayer.dimentions.height <= maxFontSize + maxFontSize / 3) {
-                        outLayer.dimentions.line_height = outLayer.dimentions.height;
+                    if(outLayer.dimensions.height <= maxFontSize + maxFontSize / 3) {
+                        outLayer.dimensions.line_height = outLayer.dimensions.height;
                     }
                 }
                 outLayer.details = details;
@@ -237,28 +248,25 @@ var JSONExporter = (function () {
                     outLayer.text = this.removeControlLayers(layer, helperLayer, helperDoc);
                 }
                 this.trimLayer(helperLayer, helperDoc);
-                if(outLayer.text && outLayer.text.dimentions) {
-                    outLayer.text.dimentions.left -= outLayer.dimentions.left;
-                    outLayer.text.dimentions.top -= outLayer.dimentions.top;
+                if(outLayer.text && outLayer.text.dimensions) {
+                    outLayer.text.dimensions.left -= outLayer.dimensions.left;
+                    outLayer.text.dimensions.top -= outLayer.dimensions.top;
                 }
-                outLayer.dimentions.left += outLayer.dimentions.width - helperDoc.width.value;
-                outLayer.dimentions.top += outLayer.dimentions.height - helperDoc.height.value;
-                outLayer.dimentions.width = helperDoc.width.value;
-                outLayer.dimentions.height = helperDoc.height.value;
-                outLayer.image = this.saveLayer(helperLayer, helperDoc, outLayer.layer_name);
-                helperDoc.close(SaveOptions.DONOTSAVECHANGES);
+                outLayer.dimensions.left += outLayer.dimensions.width - helperDoc.width.value;
+                outLayer.dimensions.top += outLayer.dimensions.height - helperDoc.height.value;
+                outLayer.dimensions.width = helperDoc.width.value;
+                outLayer.dimensions.height = helperDoc.height.value;
+                outLayer.image = this.saveLayerAndClose(helperLayer, helperDoc, outLayer.layer_name);
             }
-            if(outLayer.dimentions.left < 0) {
-                outLayer.dimentions.left = 0;
+            if(outLayer.dimensions.left < 0) {
+                outLayer.dimensions.left = 0;
             }
-            if(outLayer.dimentions.top < 0) {
-                outLayer.dimentions.top = 0;
+            if(outLayer.dimensions.top < 0) {
+                outLayer.dimensions.top = 0;
             }
             layer.visible = false;
             return outLayer;
         }
-        return {
-        };
     };
     JSONExporter.prototype.cleanUpLayers = function (layers) {
         var _layer;
@@ -301,7 +309,7 @@ var JSONExporter = (function () {
             layer = layers[i];
             name = layer.name.replace(/\W+/g, '-');
             guessedName = this.guessControl(name);
-            if(layer.typename == "LayerSet" && guessedName != 'Button' && guessedName != 'Switch' && guessedName != 'NavigationBar' && guessedName != 'TextField' && guessedName != 'Label') {
+            if(layer.typename == "LayerSet" && !this.isControl(name)) {
                 if(!parsed['objects']) {
                     parsed['objects'] = [];
                 }

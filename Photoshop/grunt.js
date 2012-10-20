@@ -13,7 +13,7 @@ module.exports = function(grunt) {
     },
     typescript: {
       base: {
-        src: ['src/json_exporter.ts', 'src/main.ts'],
+        src: ['src/json_exporter.ts', 'src/main.ts', 'src/json_normalize.ts'],
         dest: 'lib'
       }
     },
@@ -24,7 +24,7 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      files: ['src/json_exporter.ts', 'src/main.ts'],
+      files: ['src/json_exporter.ts', 'src/main.ts', 'src/json_normalize.ts'],
       tasks: 'typescript concat'
     }
   });
