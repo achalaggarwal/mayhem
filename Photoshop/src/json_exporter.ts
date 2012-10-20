@@ -23,12 +23,12 @@ class JSONExporter {
 
   process(){
     this.preferences.rulerUnits = Units.PIXELS;
-    var dimentions = { width: parseInt(this.doc.width), height: parseInt(this.doc.height) };
+    var dimensions = { top: 0, left: 0, width: parseInt(this.doc.width), height: parseInt(this.doc.height) };
     this.cleanUpLayers(this.doc.layers);
     var traversed = this.traverse(this.doc.layers);
     this.doc.close(SaveOptions.DONOTSAVECHANGES);
     this.mainDoc.close(SaveOptions.DONOTSAVECHANGES);
-    traversed = { dimentions: dimentions, layers: traversed };
+    traversed = { dimensions: dimensions, objects: traversed };
     this.preferences.rulerUnits = this.originalRulerUnits;
     var file = new File(this.folder.fullName +"/out.json");
     file.open('w');
@@ -56,6 +56,16 @@ class JSONExporter {
     } else {
       return null;
     }
+  }
+
+  isControl(name) {
+    var guessedName = this.guessControl(name);
+    return this.isControlWithText(name) || guessedName == 'Switch';
+  }
+
+  isControlWithText(name) {
+    var guessedName = this.guessControl(name);
+    return guessedName == 'Button' || guessedName == 'Switch' || guessedName == 'NavigationBar' || guessedName == 'TextField' || guessedName == 'Label' || guessedName == 'Image' || guessedName == 'Background';
   }
 
   removeControlLayers(layer, helperLayer, helperDoc) {
@@ -129,7 +139,7 @@ class JSONExporter {
       var outLayer = {
         type: guessedName,
         layer_name: layer.name.replace(/\W+/g, '-'),
-        dimentions: {
+        dimensions: {
           left   : layer.bounds[0].value,
           top    : layer.bounds[1].value,
           width  : layer.bounds[2].value - layer.bounds[0].value,
@@ -138,7 +148,6 @@ class JSONExporter {
       };
 
       if (layer.kind == LayerKind.TEXT) {
-
         var ranges = [];
         var range;
         var maxLineHeight = 0;
@@ -198,14 +207,14 @@ class JSONExporter {
         // css uses line-heights and applies them also when the text-layer has a single line
         // whereas adobe has a "leading"-attribute which has no effect for single lines
         // => if we have a single line (probably for button-labels, headings, etc.)
-        if (maxLineHeight > outLayer.dimentions.height) {
+        if (maxLineHeight > outLayer.dimensions.height) {
           // then we expand the height and adjust the position
-          outLayer.dimentions.top += (outLayer.dimentions.height - maxLineHeight) / 2;
-          outLayer.dimentions.line_height = maxLineHeight;
-          outLayer.dimentions.height = maxLineHeight;
-        } else if (outLayer.dimentions.height <= maxFontSize + maxFontSize / 3) {
+          outLayer.dimensions.top += (outLayer.dimensions.height - maxLineHeight) / 2;
+          outLayer.dimensions.line_height = maxLineHeight;
+          outLayer.dimensions.height = maxLineHeight;
+        } else if (outLayer.dimensions.height <= maxFontSize + maxFontSize / 3) {
           // we aren't sure whether the layer is single-line but chances are high in this case
-          outLayer.dimentions.line_height = outLayer.dimentions.height;
+          outLayer.dimensions.line_height = outLayer.dimensions.height;
         }
 
         outLayer.details = details;
@@ -223,28 +232,26 @@ class JSONExporter {
 
         this.trimLayer(helperLayer, helperDoc);
 
-        if (outLayer.text && outLayer.text.dimentions) {
-          outLayer.text.dimentions.left -= outLayer.dimentions.left;
-          outLayer.text.dimentions.top -= outLayer.dimentions.top;
+        if (outLayer.text && outLayer.text.dimensions) {
+          outLayer.text.dimensions.left -= outLayer.dimensions.left;
+          outLayer.text.dimensions.top -= outLayer.dimensions.top;
         }
 
-        outLayer.dimentions.left  += outLayer.dimentions.width - helperDoc.width.value;
-        outLayer.dimentions.top   += outLayer.dimentions.height - helperDoc.height.value;
-        outLayer.dimentions.width  = helperDoc.width.value;
-        outLayer.dimentions.height = helperDoc.height.value;
+        outLayer.dimensions.left  += outLayer.dimensions.width - helperDoc.width.value;
+        outLayer.dimensions.top   += outLayer.dimensions.height - helperDoc.height.value;
+        outLayer.dimensions.width  = helperDoc.width.value;
+        outLayer.dimensions.height = helperDoc.height.value;
 
         outLayer.image = this.saveLayerAndClose(helperLayer, helperDoc, outLayer.layer_name);
       }
 
-      if (outLayer.dimentions.left < 0) outLayer.dimentions.left = 0;
-      if (outLayer.dimentions.top < 0) outLayer.dimentions.top = 0;
+      if (outLayer.dimensions.left < 0) outLayer.dimensions.left = 0;
+      if (outLayer.dimensions.top < 0) outLayer.dimensions.top = 0;
 
       layer.visible = false;
 
       return outLayer;
     }
-
-    return {};
   }
 
   cleanUpLayers(layers) {
@@ -290,12 +297,7 @@ class JSONExporter {
       name  = layer.name.replace(/\W+/g, '-');
       guessedName = this.guessControl(name);
 
-      if(layer.typename == "LayerSet"
-       && guessedName != 'Button'
-       && guessedName != 'Switch'
-       && guessedName != 'NavigationBar'
-       && guessedName != 'TextField'
-       && guessedName != 'Label') {
+      if(layer.typename == "LayerSet" && !this.isControl(name)) {
         if (!parsed['objects']) parsed['objects'] = [];
         var x = {};
         var a = this.traverse(layer.layers);
