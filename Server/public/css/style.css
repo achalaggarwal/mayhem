@@ -54,6 +54,10 @@ a:hover {
   margin-right: 0 !important;
 }
 
+.alignLeft {
+  text-align: left !important;
+}
+
 /*------------Font face---------------------------*/
 
 @font-face {
@@ -129,6 +133,7 @@ a:hover {
 
 .wrapper {
   width: 100%;
+  overflow: hidden;
   background:#f8f8f8 url(../img/bkg.jpg) repeat left top;
 }
 
@@ -200,6 +205,13 @@ a.ybttn:hover, a.ybttn:focus {
   color: #8b4602;
 }
 
+.layout {
+  width: 860px;
+  margin: 0 auto;
+}
+
+
+
 /*------------header---------------------------*/
 
 header {
@@ -241,8 +253,9 @@ header .action a {
   width: 341px;
   display: block;
   font-size: 18px;
-  padding: 14px 0;
+  padding: 18px 0;
   margin: 0 auto;
+  position: relative;
   text-align: center;
   border: 1px solid #0495ba;
   -webkit-border-radius: 3px;
@@ -260,6 +273,14 @@ header .action a {
   background: -ms-linear-gradient(top,  #fcda02 0%,#00ccff 0%,#2cd1fa 100%); /* IE10+ */
   background: linear-gradient(to bottom,  #fcda02 0%,#00ccff 0%,#2cd1fa 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcda02', endColorstr='#2cd1fa',GradientType=0 ); /* IE6-9 */
+}
+
+header .action span {
+  left: 45px;
+  top: 19px;
+  width: 28px;
+  position: absolute;
+  background: url(../img/uploadIcon.png) no-repeat left top;
 }
 
 header .action h1 {
@@ -587,4 +608,229 @@ header .action p {
   margin: 0 17px;
 }
 
+/*------------login / Signup---------------------------*/
 
+.header {
+  padding: 18px 0 36px;
+}
+
+#logo {
+  color: #333333;
+  font-size: 36px;
+  text-align: center;
+  font-family: 'KlavikaMedCaps-SC';
+}
+
+#login {
+  overflow: hidden;
+  padding-bottom: 36px;
+}
+
+.actionForm {
+  width: 455px;
+  float: right;
+  margin: 112px 0 0 0;
+}
+
+.actionForm .holder {
+  padding: 5px 0;
+  border-bottom: 3px solid #555555;
+}
+
+.actionForm .holder h3 {
+  float: left;
+  margin: 0px;
+  color: #333333;
+  font-size: 32px;
+  font-weight: normal;
+  font-family: 'KlavikaMedCaps-SC';
+}
+
+.actionForm .holder a {
+  float: right;
+  margin-top: 5px;
+}
+
+.actionForm .note {
+  font-size: 17px;
+  margin: 18px 0 10px;
+}
+
+.actionForm form {}
+
+.inputField {
+  width: 445px;
+  color: #000000;
+  display: block;
+  font-size: 21px;
+  margin: 5px 0 0;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #ffffff;
+  border: 1px solid #c4c1c2;
+  padding: 12px 0 12px 8px;
+  box-shadow: 0 1px 1px #d8d8d8 inset;
+  font-family: 'KlavikaRegular-OSF',arial,sans-serif;
+}
+
+.submitBttn {
+  color: #000000;
+  padding: 20px 12px;
+  width: 429px;
+  border: 1px solid #dec405;
+  text-align: center;
+  margin-top: 10px;
+  text-shadow: none;
+  box-shadow: 0 1px 0 #fef5b4 inset, 0 1px 1px #d1d0d2;
+}
+
+/*------------listing---------------------------*/
+
+.header .nav {
+  float: right;
+  margin: 16px 0 0 0;
+}
+
+.header .nav li, .header .nav li a {
+  float: left;
+}
+
+.header .nav li .lnk {
+  font-size: 21px;
+  margin: 4px 0px 0 20px;
+  color: #d6102a;
+}
+
+#listing {
+  margin-bottom: 36px;
+  position: relative;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 0px 2px #dedddc;
+  border: 1px solid #DEDDDC;
+}
+
+#listing h2 {
+  width: 860px;
+  margin: 0 auto;
+  height: 115px;
+  font-size: 47px;
+  line-height: 115px;
+  background: url(../img/headerBkg.png) no-repeat left top;
+}
+
+.uploadAction {
+  margin: 36px 0;
+  text-align: center;
+}
+
+.uploadAction a {
+  color: #FFFFFF;
+  width: 341px;
+  display: block;
+  font-size: 18px;
+  padding: 18px 0;
+  margin: 0 auto;
+  position: relative;
+  text-align: center;
+  border: 1px solid #0495ba;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  font-family: 'KlavikaBold-Bold';
+   text-shadow: 0px 1px 0px #159abb;
+  box-shadow: inset 0 1px 0 #fefefe,  0 1px 1px #d8d9da;
+  background: #fcda02; /* Old browsers */
+  background: -moz-linear-gradient(top,  #fcda02 0%, #00ccff 0%, #2cd1fa 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fcda02), color-stop(0%,#00ccff), color-stop(100%,#2cd1fa)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #fcda02 0%,#00ccff 0%,#2cd1fa 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #fcda02 0%,#00ccff 0%,#2cd1fa 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #fcda02 0%,#00ccff 0%,#2cd1fa 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #fcda02 0%,#00ccff 0%,#2cd1fa 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcda02', endColorstr='#2cd1fa',GradientType=0 ); /* IE6-9 */
+}
+
+.uploadAction a span {
+  left: 45px;
+  top: 19px;
+  width: 28px;
+  position: absolute;
+  background: url(../img/uploadIcon.png) no-repeat left top;
+}
+
+.tip {
+  top: 102px;
+  left: 147px;
+  width: 574px;
+  font-size: 25px;
+  position: absolute;
+  height: 127px;
+  background: url(../img/tips.png) no-repeat left top;
+}
+
+.items {
+  margin: 0 20px;
+  border-top: 1px solid #e0e0e1;
+}
+
+.items table {
+  width: 820px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+table tr {
+  border-bottom: 1px solid #e0e0e1;
+}
+
+table th {
+  font-size: 18px;
+  font-weight: normal;
+  padding: 8px 0;
+  font-family: 'KlavikaBold-Bold';
+}
+
+table td {
+  padding: 12px 0;
+}
+
+table td.title {
+  width: 340px;
+  color: #000000;
+  font-size: 20px;
+  padding-left: 40px;
+  font-family: 'KlavikaLight-OSF';
+  background: url(../img/projectIcon.png) no-repeat left center;
+}
+
+table td.date {
+  font-size: 18px;
+  color: #888888;
+}
+
+table td.action a {
+  width: 141px;
+  height: 31px;
+  display: block;
+  text-indent: -999999px;
+  background: url(../img/listActions.png) no-repeat left top;
+}
+
+table td.action a:hover, table td.action a:focus {
+  background-position: left -44px;
+}
+
+#listing .info {
+  text-align: center;
+  padding: 36px 0;
+  font-size: 21px;
+  color: #333333;
+}
+
+#listing .info a {
+  color: #d6102a;
+}

@@ -5,7 +5,7 @@ module.exports = function (passport) {
      */
      
     "login" : function(req, res) {
-      res.render('sessions/login', { title: 'Login' , user: req.user, message: req.flash('error')});
+      res.render('sessions/login', { title: 'Login' , user: req.user, message: req.flash('error'), object: req.session['object']});
     },
     
     /*
@@ -17,12 +17,28 @@ module.exports = function (passport) {
     },
     
     /*
+     * GET Reset Password Form
+     */
+    "resetPassword" : function(req, res) {
+      res.render('sessions/reset_password', {title: 'Reset Password', message: null});
+    },
+    
+    /*
+     * POST Reset Account Password
+     */
+    "generatePassword" : function(req, res) {
+      User.resetAccount(req.body.email, function(message) {
+        res.render('sessions/reset_password', {title: 'Reset Password', message: message});
+      });
+    },
+    
+    /*
      * GET logout
      */
     
     "destroy" : function(req, res) {
       req.logout();
-      res.redirect('/');  
+      res.redirect('/');
     }
   };
 };

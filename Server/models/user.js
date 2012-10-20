@@ -1,5 +1,53 @@
 var crypto = require('crypto');
+var SendGrid = require('sendgrid').SendGrid;
+
+/*
+ * User Reset Account
+ */
+
+User.resetAccount = function(email, cb) {
+  if (validEmail(email)) {
+    User.findByEmail(email, function(err, user) {
+      if (err) { cb("Email address is not found."); return;}
+      user.randomPassword();
+      cb("The new password has been emailed to you");
+    });
+  }
+  else {
+    cb("Email address is invalid");
+  }
+};
+
+/*
+ * User set Random Password
+ */
+ 
+ User.prototype.randomPassword = function() {
   
+  var me = this;
+  var salt = me.salt;
+  var newPassword = randomString(8);
+  
+  me.passwordHash = md5(newPassword + salt);
+  me.save(function(err) {
+    if (err) {
+      return;
+    }
+    //send new password in email
+    var sendgrid = new SendGrid('bhaveshdhupar', '~bhavesh');
+    sendgrid.send({
+      to: me.email,
+      from: 'support@kinesis.io',
+      subject: 'Account Password Reset Request',
+      text: 'You account password has been reset. The new password is ' + newPassword
+    }, function(success, message) {
+        if (!success) {
+          console.log(message);
+        }
+    });
+  });
+ };
+
 /*
  * User authenticate
  */
@@ -7,6 +55,106 @@ var crypto = require('crypto');
 User.prototype.authenticate = function(password) {
   _passwordHash = md5(password + this.salt);
   return (_passwordHash === this.passwordHash);
+};
+
+/*
+ * Add new User
+ */
+
+User.create = function(params, cb) {
+  User.validate(params, function(err) {
+    if(err.length > 0) {
+      cb(err, null);
+    }
+    else {
+      User.available(params, function(err) {
+        if(err) {
+          cb(err, null);
+        }
+        else {
+          var salt = randomSalt();
+          var userData =  {
+                            username: params.username,
+                            passwordHash: md5(params.password + salt),
+                            salt: salt,
+                            email: params.email
+                          };
+    
+          var _user = new User(userData);
+          _user.save(function (err) {
+            if (err) {
+              console.log(err);
+              cb(err, null);
+            }
+            else {
+              console.log(_user.username + " added!");
+              cb(null, _user);
+            }
+          });
+        }
+      });
+    }
+  });
+};
+
+/*
+ * Check availability
+ */
+ 
+User.available = function(params, cb) {
+  User.findByUsername(params.username, function(err, user) {
+    if(user) {
+      cb(["Username is already used"]);
+    }
+    else {
+      //validate everything else
+      User.findByEmail(params.email, function(err, user) {
+        if(user) {
+          cb(["Email is already used"]);
+        }
+        else {
+          cb(null);
+        }
+      });
+    }
+  });
+};
+
+/*
+ * Validate Email
+ */
+
+var validEmail = function(email) {
+  var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+  return filter.test(email);
+};
+
+/*
+ * Validate User
+ */
+
+User.validate = function(params, cb) {
+  var err = [];
+  
+  if(!params.hasOwnProperty('username') || params.username.length === 0) {
+    err.push("Username is missing");
+  }
+  
+  if (!params.hasOwnProperty('password') || params.password.length === 0) {
+    err.push("Password is missing");
+  }
+  
+  if (!params.hasOwnProperty('email') || params.email.length === 0) {
+    err.push("Email is missing");
+  }
+  else {
+    //email validation
+    if (!validEmail(params.email)) {
+      err.push('Email is invalid');
+    }
+  }
+
+  cb(err);
 };
 
 /*
@@ -40,6 +188,20 @@ User.findByUsername = function(username, cb) {
 };
 
 /*
+ * Find by Email
+ */
+
+User.findByEmail = function(email, cb) {
+  User.findOne({ 'email': email }, function (err, _user) {
+    if (err) {
+      cb(null, null);
+      return;
+    }
+    cb(null, _user);
+  });
+};
+
+/*
  * Get MD5 for input string
  */
 
@@ -48,11 +210,19 @@ var md5 = function(input) {
 };
 
 /*
+ * Generate Random String of length
+ */
+ 
+var randomString = function(length) {
+  return Math.random().toString(36).substr(2, Math.min(length, 16));
+};
+
+/*
  * Generate Random Salt string
  */
 
 var randomSalt = function() {
-  return Math.random().toString(36).substr(2, 5);
+  return randomString(5);
 };
 
 /*
@@ -67,7 +237,7 @@ User.find(function(err, users) {
     var salt = randomSalt();
     var baseUsers = [
                       { username: 'bob', passwordHash: md5('secret' + salt), salt: salt, email: 'admin@domain.com' }
-                    , { username: 'joe', passwordHash: md5('birthday' + salt), salt: salt, email: 'admin@domain.com' } 
+                    , { username: 'joe', passwordHash: md5('birthday' + salt), salt: salt, email: 'admin@domain.com' }
                     ];
     
     for (var i = baseUsers.length - 1; i >= 0; i--) {

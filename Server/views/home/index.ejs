@@ -1,7 +1,7 @@
-<% layout('layout') -%>
+<% layout('../layout') -%>
 <header>
   <ul>
-    <li><a href="" class="bttn">Create Account</a></li>
+    <li><a href="/register" class="bttn">Create Account</a></li>
     <li><a href="/login" class="ybttn">Login</a></li>
   </ul>
   <div class="action">
@@ -160,12 +160,11 @@ adipiscing elit.</li>
 <script>
 $('#upload').bind('click', function() {
   filepicker.getFile('*/*', function(url, data){
-    // $('#output').append(url).html(data.filename));
     $.ajax({
       type: 'POST',
       url: '/upload',
       data: {data: data, url: url},
-      success: function(data) { window.location = data; },
+      success: function(data) { $('body').append(data); }
     });
   });
 });

@@ -1,3 +1,8 @@
-<% layout('../layout') -%>
-<h1><%= title %></h1>
-<p>Welcome to <%= title %></p>
+<script type="text/javascript">
+  <% if(job.status != 5) { %>
+  setTimeout(function() {
+    sendRequest("<%= job._id %>");  
+  }, 2000);
+  <% } %>
+  updateStatus("<%= job._id %>", "<%= job.statusMessage() %>");
+</script>

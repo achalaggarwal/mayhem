@@ -57,11 +57,10 @@ passport.use(new LocalStrategy(
 ));
 
 var authenticatedRoutes = {
-                              "/upload" : 1
-                            , "/convert" : 1
-                            , "/wait" : 1
-                            , "/status" : 1
-                            , "/sessions" : 1
+                            "/convert"  : 1
+                          , "/wait"     : 1
+                          , "/status"   : 1
+                          , "/sessions" : 1
                           };
 
 var app = express();
@@ -108,13 +107,18 @@ app.configure('development', function(){
 });
 
 app.get('/', homeController.index);
+app.get('/register', homeController.register);
+app.post('/register', homeController.addUser);
 
 app.get('/convert', convertorController.convert);
 app.get('/wait', convertorController.wait);
-app.get('/status', convertorController.status);
+app.post('/status', convertorController.status);
 app.post('/upload', convertorController.upload);
 
 app.get('/login', sessionsController.login);
+app.get('/reset_password', sessionsController.resetPassword);
+app.post('/reset_password', sessionsController.generatePassword);
+
 app.post('/login', sessionsController.create);
 app.get('/logout', sessionsController.destroy);
 
