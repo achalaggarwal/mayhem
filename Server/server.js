@@ -15,6 +15,10 @@ var express = require('express')
   , sessionsController = require('./controllers/sessions')(passport)
   , LocalStrategy = require('passport-local').Strategy;
 
+/*
+ * Require Models
+ */
+ 
 require('./models/models.js');
 
 // Passport session setup.

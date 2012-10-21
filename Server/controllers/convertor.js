@@ -28,8 +28,11 @@ exports.convert = function(req, res){
     req.session['object'] = null;
     return;
   }
-
-  res.render('convertor/convert', { title: 'Convert' , user: req.user});
+  
+  Job.find({owner: req.user}, function(err, jobs) {
+    if (err) console.log(err);
+    res.render('convertor/convert', { title: 'Convert' , user: req.user, jobs: jobs});
+  });
 };
 
 /*
@@ -38,7 +41,7 @@ exports.convert = function(req, res){
 
 exports.wait = function(req, res){
   var currentUser = req.user;
-  Job.find({owner: currentUser}, function(err, jobs) {
+  Job.find({owner: currentUser, status: 0}, function(err, jobs) {
     if (err) console.log(err);
     res.render('convertor/wait', { title: 'Wait', jobs: jobs });
   });

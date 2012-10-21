@@ -834,3 +834,51 @@ table td.action a:hover, table td.action a:focus {
 #listing .info a {
   color: #d6102a;
 }
+
+/*------------Preview---------------------------*/
+
+#preview {}
+
+#preview h2 {
+ color: #333;
+ text-shadow: 0px 1px 0px #ffffff;
+}
+
+#preview .actionForm h4 {
+ color: #333;
+ font-size: 32px;
+ margin: 3px 0;
+ font-weight: normal;
+ font-family: 'KlavikaLight-OSF';
+}
+
+#preview .actionForm .note {
+ width: 455px;
+}
+
+.downloads {
+}
+
+.downloads a {
+ float: left;
+}
+
+.downloads .action {
+ width: 215px;
+ padding: 14px 0;
+ text-align: center;
+ color: #000000;
+ border: 1px solid #dec405;
+ box-shadow: 0 1px 0 #fef5b4 inset, 0 1px 1px #d1d0d2;
+}
+
+.downloads a:first-child {
+ margin-right: 20px;
+}
+
+.downloads .noAction {
+ padding: 14px 0;
+ text-align: center;
+ width: 453px;
+ margin-top: 18px;
+}
