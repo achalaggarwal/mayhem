@@ -384,21 +384,34 @@ header .action p {
 }
 
 .info ul li a {
-  width: 217px;
-  color: #333333;
+  width: 214px;
+  color: #ffffff;
   font-size: 20px;
   padding: 10px 0;
   text-align: center;
   font-family: 'KlavikaMedCaps-SC';
+  border: 3px solid #ae1632;
+}
+
+.info ul li .active {
+  color: #333333;
+  border: none;
+  padding: 13px 0;
+  font-family: 'KlavikaMedCaps-SC';
   background-color: #fee003;
 }
 
-.info ul li a + div {
+
+.info ul li:first-child a {
+  margin-right: 20px;
+}
+
+ #developer-content, #designer-content {
   float: left;
   width: 100%;
 }
 
-.info ul li .note {
+#developer-content .note, #designer-content .note {
   color: #FFFFFF;
   font-size: 17px;
   line-height: 23px;
@@ -406,11 +419,11 @@ header .action p {
   font-family: 'KlavikaRegular-OSF';
 }
 
-.info ul li .points {
+.points {
   margin: 18px 0;
 }
 
-.info ul li .points li {
+.info .points li {
   color: #eeeeee;
   font-size: 14px;
   padding: 3px 5px;
@@ -423,12 +436,12 @@ header .action p {
   border: 1px solid #E52A44;
 }
 
-.info .actions {
+ .demoActions {
   overflow: hidden;
   width: 455px;
 }
 
-.info .actions a {
+.demoActions a {
   color: #7a7a7a;
   float: left;
   width: 201px;
@@ -441,11 +454,11 @@ header .action p {
   background: url(../img/actionLnkBkg.png) no-repeat left top;
 }
 
-.info .actions > a:first-child {
+.demoActions > a:first-child {
   margin-right: 20px;
 }
 
-.actions .pointer {
+.demoActions .pointer {
   left: 407px;
   top:520px;
   width: 37px;
