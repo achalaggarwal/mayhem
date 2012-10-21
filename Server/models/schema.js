@@ -1,5 +1,6 @@
 var AppConfig = require('../config.js');
 var mongoose = require('mongoose');
+var moment = require('moment');
 
 var db = mongoose.createConnection(AppConfig.mongo.path);
   
@@ -36,3 +37,10 @@ var jobSchema = new mongoose.Schema({
 });
 
 Job = db.model('Job', jobSchema);
+
+var createdAt = function(format) {
+  return moment(this.created_at).format(format);
+};
+
+Job.prototype.createdAt   = createdAt;
+User.prototype.createdAt  = createdAt;

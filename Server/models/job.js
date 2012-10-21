@@ -1,5 +1,3 @@
-var moment = require('moment');
-
 /*
  * Job Model
  */
@@ -37,10 +35,6 @@ Job.prototype.statusMessage = function() {
       return keys[i];
     }
   }
-};
-
-Job.prototype.createdAt = function(format) {
-  return moment(this.created_at).format(format);
 };
 
 Job.prototype.saveStatus = function(val) {
