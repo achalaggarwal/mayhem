@@ -1,18 +1,21 @@
-class JSONExporter {
+class PSD2JSON {
   originalRulerUnits: any;
   doc: any;
 
-  constructor(public path:string, public app: any, public preferences: Object){
-    this.app.open(new File(path));
+  constructor(public options:string, public app: any, public preferences: Object){
+    this.sourceFile = options.source;
+    this.exportDir  = options.target;
+    this.jsonCache  = options.jsonCache;
+
+    this.app.open(new File(this.sourceFile));
 
     this.originalRulerUnits = this.preferences.rulerUnits;
     this.doc                = this.app.activeDocument;
     this.mainDoc            = this.doc;
     this.doc                = this.mainDoc.duplicate();
 
-    var docFileName   = this.mainDoc.name.replace(/\W+/g, '-');
-    this.folder       = new Folder(this.mainDoc.fullName.path +"/export");
-    var imagesFolder  = new Folder(this.folder.fullName +"/images");
+    this.folder       = new Folder(this.exportDir);
+    var imagesFolder  = new Folder(this.exportDir +"/images");
 
     if(!this.folder.exists)
       this.folder.create();
@@ -30,7 +33,7 @@ class JSONExporter {
     this.mainDoc.close(SaveOptions.DONOTSAVECHANGES);
     traversed = { dimensions: dimensions, objects: traversed };
     this.preferences.rulerUnits = this.originalRulerUnits;
-    var file = new File(this.folder.fullName +"/json/out.json");
+    var file = new File(this.jsonCache);
     file.open('w');
     file.writeln(js_beautify(JSON.stringify(traversed), {indent_size: 2, indent_char: ' '}));
     file.close();

@@ -2,30 +2,37 @@ var fs    = require('fs')
  , exec   = require('child_process').exec
  , path   = require('path')
  , async  = require('async')
- , wrench = require('wrench');
+ , wrench = require('wrench')
+ , JSON2IOS = require('./json_to_ios').JSON2IOS;
 
 class PSD2IOS {
-  constructor(public filePath:string) {
-    this.exportDir   = path.dirname(this.filePath) + '/export';
-    this.jsonDir     = this.exportDir + '/json';
-    this.jsonPath    = this.jsonDir + '/out.json';
+  constructor(public filePath:string, public exportDir:string) {
+    this.imagesDir   = path.join(this.exportDir, 'images');
+    this.jsonPath    = path.join(this.exportDir, 'out.json');
     this.prefsFile   = path.join(process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'], 'psd2json.json');
-    this.preferences = { path: this.filePath };
+    this.preferences = { source: this.filePath, target: this.exportDir, jsonCache: this.jsonPath };
     this.scriptPath  = path.join(__dirname, '../../', 'dist/psd2json.jsx');
     this.setup();
   }
 
   setup() {
-    wrench.rmdirSyncRecursive(this.exportDir);
-    fs.mkdirSync(this.exportDir);
-    fs.mkdirSync(this.jsonDir);
-    fs.appendFileSync(this.jsonPath, '');
+    if (fs.existsSync(this.imagesDir))
+      wrench.rmdirSyncRecursive(this.imagesDir);
+    if (!fs.existsSync(this.exportDir))
+      fs.mkdirSync(this.exportDir);
+    if (!fs.existsSync(this.imagesDir))
+      fs.mkdirSync(this.imagesDir);
+    fs.writeFileSync(this.jsonPath, '');
     fs.writeFileSync(this.prefsFile, JSON.stringify(this.preferences));
   }
 
-  start(done) {
+  tearDown() {
+    fs.unlinkSync(this.jsonPath);
+    fs.unlinkSync(this.prefsFile);
+  }
+
+  convert(done) {
     var execPS = (done)=> {
-      console.log();
       exec('open ' + this.scriptPath, (error, stdout, stderr)=> {
         done();
       });
@@ -49,7 +56,9 @@ class PSD2IOS {
     }
 
     async.series([execPS, watchFile, getData], (err, results)=> {
-      done(results[2]);
+      this.tearDown();
+      var a = new JSON2IOS(results[2]);
+      done(a.convert());
     });
   }
 }

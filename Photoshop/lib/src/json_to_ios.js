@@ -1,15 +1,14 @@
 var fs = require('fs');
-var JSONNormalize = (function () {
-    function JSONNormalize(file_path) {
-        this.file_path = file_path;
-        this.json = JSON.parse(fs.readFileSync(file_path));
+var JSON2IOS = (function () {
+    function JSON2IOS(json) {
+        this.json = json;
         this.data = {
         };
         this.data.width = this.json.dimensions.width;
         this.data.height = this.json.dimensions.height;
         this.data.objects = [];
     }
-    JSONNormalize.prototype.normalize = function (data) {
+    JSON2IOS.prototype.normalize = function (data) {
         var x1 = 9999;
         var y1 = 9999;
         var x2 = 0;
@@ -81,13 +80,12 @@ var JSONNormalize = (function () {
         }
         return out;
     };
-    JSONNormalize.prototype.stringify = function (dimensions) {
+    JSON2IOS.prototype.stringify = function (dimensions) {
         return "{{x1,y1},{width,height}}".replace('x1', dimensions.left).replace('y1', dimensions.top).replace('width', dimensions.width).replace('height', dimensions.height);
     };
-    JSONNormalize.prototype.start = function () {
-        console.log(JSON.stringify(this.normalize(this.json), null, 2));
+    JSON2IOS.prototype.convert = function () {
+        return this.normalize(this.json);
     };
-    return JSONNormalize;
+    return JSON2IOS;
 })();
-var n = new JSONNormalize('/Users/gogo/Desktop/photoshop/source1-psd-export/out.json');
-n.start();
+exports.JSON2IOS = JSON2IOS;

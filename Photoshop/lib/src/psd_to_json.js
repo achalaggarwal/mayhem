@@ -1,16 +1,18 @@
-var JSONExporter = (function () {
-    function JSONExporter(path, app, preferences) {
-        this.path = path;
+var PSD2JSON = (function () {
+    function PSD2JSON(options, app, preferences) {
+        this.options = options;
         this.app = app;
         this.preferences = preferences;
-        this.app.open(new File(path));
+        this.sourceFile = options.source;
+        this.exportDir = options.target;
+        this.jsonCache = options.jsonCache;
+        this.app.open(new File(this.sourceFile));
         this.originalRulerUnits = this.preferences.rulerUnits;
         this.doc = this.app.activeDocument;
         this.mainDoc = this.doc;
         this.doc = this.mainDoc.duplicate();
-        var docFileName = this.mainDoc.name.replace(/\W+/g, '-');
-        this.folder = new Folder(this.mainDoc.fullName.path + "/export");
-        var imagesFolder = new Folder(this.folder.fullName + "/images");
+        this.folder = new Folder(this.exportDir);
+        var imagesFolder = new Folder(this.exportDir + "/images");
         if(!this.folder.exists) {
             this.folder.create();
         }
@@ -18,7 +20,7 @@ var JSONExporter = (function () {
             imagesFolder.create();
         }
     }
-    JSONExporter.prototype.process = function () {
+    PSD2JSON.prototype.process = function () {
         this.preferences.rulerUnits = Units.PIXELS;
         var dimensions = {
             top: 0,
@@ -35,7 +37,7 @@ var JSONExporter = (function () {
             objects: traversed
         };
         this.preferences.rulerUnits = this.originalRulerUnits;
-        var file = new File(this.folder.fullName + "/json/out.json");
+        var file = new File(this.jsonCache);
         file.open('w');
         file.writeln(js_beautify(JSON.stringify(traversed), {
             indent_size: 2,
@@ -43,7 +45,7 @@ var JSONExporter = (function () {
         }));
         file.close();
     };
-    JSONExporter.prototype.guessControl = function (name) {
+    PSD2JSON.prototype.guessControl = function (name) {
         name = name.toLowerCase();
         if(name.indexOf('label') != -1) {
             return "Label";
@@ -75,15 +77,15 @@ var JSONExporter = (function () {
             }
         }
     };
-    JSONExporter.prototype.isControl = function (name) {
+    PSD2JSON.prototype.isControl = function (name) {
         var guessedName = this.guessControl(name);
         return this.isControlWithText(name) || guessedName == 'Switch';
     };
-    JSONExporter.prototype.isControlWithText = function (name) {
+    PSD2JSON.prototype.isControlWithText = function (name) {
         var guessedName = this.guessControl(name);
         return guessedName == 'Button' || guessedName == 'Switch' || guessedName == 'NavigationBar' || guessedName == 'TextField' || guessedName == 'Label' || guessedName == 'Image' || guessedName == 'Background';
     };
-    JSONExporter.prototype.removeControlLayers = function (layer, helperLayer, helperDoc) {
+    PSD2JSON.prototype.removeControlLayers = function (layer, helperLayer, helperDoc) {
         var _layer;
         var _remove = [];
         var _properties = null;
@@ -105,7 +107,7 @@ var JSONExporter = (function () {
         }
         return _properties;
     };
-    JSONExporter.prototype.trimLayer = function (layer, doc) {
+    PSD2JSON.prototype.trimLayer = function (layer, doc) {
         doc.crop(layer.bounds);
         var desc = new ActionDescriptor();
         desc.putEnumerated(sTID("trimBasedOn"), sTID("trimBasedOn"), cTID("Trns"));
@@ -126,7 +128,7 @@ var JSONExporter = (function () {
         } catch (e) {
         }
     };
-    JSONExporter.prototype.saveLayerAndClose = function (layer, doc, name) {
+    PSD2JSON.prototype.saveLayerAndClose = function (layer, doc, name) {
         var imgRelPath = "images/" + name + ".png";
         layer.path = this.folder.fullName + "/" + imgRelPath;
         var saveOptions = new PNGSaveOptions();
@@ -135,7 +137,7 @@ var JSONExporter = (function () {
         doc.close(SaveOptions.DONOTSAVECHANGES);
         return layer.path;
     };
-    JSONExporter.prototype.render = function (layer, guessedName) {
+    PSD2JSON.prototype.render = function (layer, guessedName) {
         var isVisible = true;
         if(isVisible) {
             this.app.activeDocument = this.doc;
@@ -268,7 +270,7 @@ var JSONExporter = (function () {
             return outLayer;
         }
     };
-    JSONExporter.prototype.cleanUpLayers = function (layers) {
+    PSD2JSON.prototype.cleanUpLayers = function (layers) {
         var _layer;
         var _mergeLayers = [];
         var _guessedName;
@@ -299,7 +301,7 @@ var JSONExporter = (function () {
             newLayer.merge();
         }
     };
-    JSONExporter.prototype.traverse = function (layers) {
+    PSD2JSON.prototype.traverse = function (layers) {
         var layer;
         var parsed = [];
         var name;
@@ -329,5 +331,5 @@ var JSONExporter = (function () {
         }
         return parsed;
     };
-    return JSONExporter;
+    return PSD2JSON;
 })();

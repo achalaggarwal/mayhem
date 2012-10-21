@@ -4,8 +4,8 @@ function cTID(s) {
 function sTID(s) {
     return app.stringIDToTypeID(s);
 }
-function main(preferences) {
-    var exporter = new JSONExporter(preferences.path, app, preferences);
+function main(options) {
+    var exporter = new PSD2JSON(options, app, preferences);
     exporter.process();
     return true;
 }

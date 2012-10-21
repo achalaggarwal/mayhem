@@ -1,8 +1,8 @@
 function cTID(s) { return app.charIDToTypeID(s); }
 function sTID(s) { return app.stringIDToTypeID(s); }
 
-function main(preferences:string) {
-  var exporter = new JSONExporter(preferences.path, app, preferences);
+function main(options:string) {
+  var exporter = new PSD2JSON(options, app, preferences);
   exporter.process();
   return true;
 }
