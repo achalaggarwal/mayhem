@@ -14,6 +14,7 @@ body {
   font-size: 14px;
   background-color:;
   font-family: 'KlavikaRegular-OSF', arial, sans-serif;
+  background:#f8f8f8 url(../img/bkg.jpg) repeat left top;
 }
 
 ul {
@@ -134,7 +135,7 @@ a:hover {
 .wrapper {
   width: 100%;
   overflow: hidden;
-  background:#f8f8f8 url(../img/bkg.jpg) repeat left top;
+
 }
 
 h1 {
@@ -224,9 +225,8 @@ header {
 }
 
 header ul {
-  width: 960px;
   overflow: hidden;
-  margin: 0 auto;
+  margin-right: 20px;
   padding: 20px 0 12px;
 }
 
@@ -240,6 +240,13 @@ header ul > li:first-child a {
 
 header ul li a:hover, header ul li a:focus {
   color: #8b4602;
+}
+
+header ul li .workLnk {
+  font-size: 16px;
+  color: #fefefe;
+  margin-right: 20px;
+  font-family: 'KlavikaMedCaps-SC';
 }
 
 header .action {
@@ -287,10 +294,12 @@ header .action h1 {
   color: #FFFFFF;
   font-size: 29px;
   margin-bottom: 5px;
+  font-weight: normal;
 }
 
 header .action strong {
   font-size: 34px;
+  font-weight: normal;
   font-family: 'KlavikaBold-Bold';
 }
 
@@ -356,6 +365,7 @@ header .action p {
   font-size: 38px;
   margin: 0px;
   text-align: center;
+  font-weight: normal;
   text-shadow: 0px 1px 0px #ec6375;
   font-family: 'KlavikaLight-OSF';
 }
@@ -462,7 +472,7 @@ header .action p {
 
 #working .details {
   width: 860px;
-  margin: 0 auto 36px;
+  margin: 10px auto 36px;
 }
 
 #working .details ul {
@@ -470,6 +480,11 @@ header .action p {
   width: 409px;
   padding: 0;
   text-align: center;
+}
+
+
+#working .details .code {
+  margin: 0;
 }
 
 #working .details ul:first-child {
@@ -485,7 +500,7 @@ header .action p {
 #working .details .heading {
   color: #333333;
   list-style: none;
-  font-size: 21px;
+  font-size: 22px;
   font-family: 'KlavikaMedCaps-SC';
 }
 
@@ -685,6 +700,54 @@ header .action p {
   box-shadow: 0 1px 0 #fef5b4 inset, 0 1px 1px #d1d0d2;
 }
 
+/*------------Preview---------------------------*/
+
+#preview {}
+
+#preview h2 {
+  color: #333;
+  text-shadow: 0px 1px 0px #ffffff;
+}
+
+#preview .actionForm h4 {
+  color: #333;
+  font-size: 32px;
+  margin: 3px 0;
+  font-weight: normal;
+  font-family: 'KlavikaLight-OSF';
+}
+
+#preview .actionForm .note {
+  width: 455px;
+}
+
+.downloads {
+}
+
+.downloads a {
+  float: left;
+}
+
+.downloads .action {
+  width: 215px;
+  padding: 14px 0;
+  text-align: center;
+  color: #000000;
+  border: 1px solid #dec405;
+  box-shadow: 0 1px 0 #fef5b4 inset, 0 1px 1px #d1d0d2;
+}
+
+.downloads a:first-child {
+  margin-right: 20px;
+}
+
+.downloads .noAction {
+  padding: 14px 0;
+  text-align: center;
+  width: 453px;
+  margin-top: 18px;
+}
+
 /*------------listing---------------------------*/
 
 .header .nav {
@@ -835,50 +898,189 @@ table td.action a:hover, table td.action a:focus {
   color: #d6102a;
 }
 
-/*------------Preview---------------------------*/
 
-#preview {}
+/*------------Works---------------------------*/
 
-#preview h2 {
- color: #333;
- text-shadow: 0px 1px 0px #ffffff;
+#work {
+  margin-bottom: 36px;
+  position: relative;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 0px 2px #dedddc;
+  border: 1px solid #DEDDDC;
 }
 
-#preview .actionForm h4 {
- color: #333;
- font-size: 32px;
- margin: 3px 0;
- font-weight: normal;
- font-family: 'KlavikaLight-OSF';
+
+#work h2 {
+  width: 860px;
+  margin: 0 auto;
+  height: 115px;
+  font-size: 47px;
+  line-height: 63px;
+  padding-top: 10px;
+  background: url(../img/headerBkg.png) no-repeat left top;
 }
 
-#preview .actionForm .note {
- width: 455px;
+#work h2 span {
+  color: #FEFEFE;
+  display: block;
+  font-family: 'KlavikaMedCaps-SC';
+  font-size: 22px;
+  margin-top: -22px;
 }
 
-.downloads {
+.controls {
+  margin: 36px 0 0;
 }
 
-.downloads a {
- float: left;
+.controls .blk {}
+
+.blk h3 {
+  margin: 0;
+  color: #333333;
+  font-size: 32px;
+  font-weight: normal;
+  text-align: center;
+
 }
 
-.downloads .action {
- width: 215px;
- padding: 14px 0;
- text-align: center;
- color: #000000;
- border: 1px solid #dec405;
- box-shadow: 0 1px 0 #fef5b4 inset, 0 1px 1px #d1d0d2;
+.blk .rulz {
+  margin: 18px 0 36px;
+  background: url(../img/shadowDivider.jpg) no-repeat left top;
 }
 
-.downloads a:first-child {
- margin-right: 20px;
+.rulz p {
+  text-align: center;
+  color: #333333;
+  font-size: 21px;
 }
 
-.downloads .noAction {
- padding: 14px 0;
- text-align: center;
- width: 453px;
- margin-top: 18px;
+.rulz p span {
+  color: #d50b29;
+}
+
+.rulz .thumb {
+  padding: 0 10px;
+}
+
+.rulz .thumb h4 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: normal;
+  font-family: 'KlavikaMedCaps-SC';
+}
+
+.thumb .col {
+  float: left;
+  width: 267px;
+  text-align: center;
+}
+
+.col .holder {
+  height: 541px;
+  background: url(../img/holders.jpg) no-repeat left top;
+}
+
+.psd {
+  margin: 0 19px;
+}
+
+.psd .holder {
+  background-position: -290px 0;
+}
+
+.xcode .holder {
+  background-position: -576px 0;
+}
+
+#imageview .design .holder div {
+  background: url("../img/designImg.jpg") no-repeat scroll 27px 103px transparent;
+  height: 441px;
+  width: 253px;
+}
+
+#imageview .psd .holder div {
+  background: url("../img/psdImg.png") no-repeat scroll 17px 100px transparent;
+  height: 388px;
+  width: 256px;
+}
+
+#imageview .xcode .holder div {
+  background: url("../img/xcodeImg.png") no-repeat scroll 20px 112px transparent;
+  height: 441px;
+  width: 253px;
+}
+
+#labelview .design .holder div {
+  background: url("../img/designLabel.jpg") no-repeat scroll 78px 250px transparent;
+  height: 441px;
+  width: 253px;
+}
+
+#labelview .psd .holder div {
+  background: url("../img/psdLabel.png") no-repeat scroll 17px 100px transparent;
+  height: 388px;
+  width: 256px;
+}
+
+#labelview .xcode .holder div {
+  background: url("../img/xcodeLabel.png") no-repeat scroll 20px 112px transparent;
+  height: 441px;
+  width: 253px;
+}
+
+#buttonview .design .holder div {
+  background: url("../img/designButton.jpg") no-repeat scroll 45px 238px transparent;
+  height: 441px;
+  width: 253px;
+}
+
+#buttonview .psd .holder div {
+  background: url("../img/psdButton.png") no-repeat scroll 17px 95px transparent;
+  height: 509px;
+  width: 256px;
+}
+
+#buttonview .xcode .holder div {
+  background: url("../img/xcodeButton.png") no-repeat scroll 20px 112px transparent;
+  height: 441px;
+  width: 253px;
+}
+
+#tfview .design .holder div {
+  background: url("../img/designTf.jpg") no-repeat scroll 27px 102px transparent;
+  height: 441px;
+  width: 253px;
+}
+
+#tfview .psd .holder div {
+  background: url("../img/psdTf.png") no-repeat scroll 17px 95px transparent;
+  height: 509px;
+  width: 256px;
+}
+
+#tfview .xcode .holder div {
+  background: url("../img/xcodeTf.png") no-repeat scroll 20px 112px transparent;
+  height: 441px;
+  width: 253px;
+}
+
+#barview .design .holder div {
+  background: url("../img/designBar.jpg") no-repeat scroll 27px 102px transparent;
+  height: 441px;
+  width: 253px;
+}
+
+#barview .psd .holder div {
+  background: url("../img/psdBar.png") no-repeat scroll 17px 95px transparent;
+  height: 509px;
+  width: 256px;
+}
+
+#barview .xcode .holder div {
+  background: url("../img/xcodeBar.png") no-repeat scroll 20px 112px transparent;
+  height: 441px;
+  width: 253px;
 }

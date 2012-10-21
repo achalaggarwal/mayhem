@@ -28,3 +28,11 @@ exports.addUser = function(req, res) {
     }
   });
 };
+
+/*
+ * GET How it works Page
+ */
+
+exports.howitworks = function(req, res){
+  res.render('home/work', { title: 'How it works' });
+};

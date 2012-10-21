@@ -116,6 +116,8 @@ app.get('/', homeController.index);
 app.get('/register', homeController.register);
 app.post('/register', homeController.addUser);
 
+app.get('/howitworks', homeController.howitworks);
+
 app.get('/convert', convertorController.convert);
 app.get('/wait', convertorController.wait);
 app.post('/status', convertorController.status);
