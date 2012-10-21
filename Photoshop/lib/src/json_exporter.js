@@ -9,7 +9,7 @@ var JSONExporter = (function () {
         this.mainDoc = this.doc;
         this.doc = this.mainDoc.duplicate();
         var docFileName = this.mainDoc.name.replace(/\W+/g, '-');
-        this.folder = new Folder(this.mainDoc.fullName.path + "/" + docFileName + "-export");
+        this.folder = new Folder(this.mainDoc.fullName.path + "/export");
         var imagesFolder = new Folder(this.folder.fullName + "/images");
         if(!this.folder.exists) {
             this.folder.create();
@@ -35,7 +35,7 @@ var JSONExporter = (function () {
             objects: traversed
         };
         this.preferences.rulerUnits = this.originalRulerUnits;
-        var file = new File(this.folder.fullName + "/out.json");
+        var file = new File(this.folder.fullName + "/json/out.json");
         file.open('w');
         file.writeln(js_beautify(JSON.stringify(traversed), {
             indent_size: 2,
