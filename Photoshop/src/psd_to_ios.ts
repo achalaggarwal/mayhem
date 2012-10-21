@@ -54,5 +54,4 @@ class PSD2IOS {
   }
 }
 
-//var a = new PSD2IOS('/Users/gogo/Desktop/photoshop/source1.psd');
-//a.start();
+exports.PSD2IOS = PSD2IOS;

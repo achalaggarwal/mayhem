@@ -57,3 +57,4 @@ var PSD2IOS = (function () {
     };
     return PSD2IOS;
 })();
+exports.PSD2IOS = PSD2IOS;
