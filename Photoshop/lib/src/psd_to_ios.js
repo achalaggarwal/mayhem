@@ -14,6 +14,7 @@ var PSD2IOS = (function () {
         this.preferences = {
             path: this.filePath
         };
+        this.scriptPath = path.join(__dirname, '../../', 'dist/psd2json.jsx');
         this.setup();
     }
     PSD2IOS.prototype.setup = function () {
@@ -23,10 +24,11 @@ var PSD2IOS = (function () {
         fs.appendFileSync(this.jsonPath, '');
         fs.writeFileSync(this.prefsFile, JSON.stringify(this.preferences));
     };
-    PSD2IOS.prototype.start = function () {
+    PSD2IOS.prototype.start = function (done) {
         var _this = this;
         var execPS = function (done) {
-            exec('open /Users/gogo/code/node/ProjectMayhem/Photoshop/dist/psd2json.jsx', function (error, stdout, stderr) {
+            console.log();
+            exec('open ' + _this.scriptPath, function (error, stdout, stderr) {
                 done();
             });
         };
@@ -50,7 +52,7 @@ var PSD2IOS = (function () {
             watchFile, 
             getData
         ], function (err, results) {
-            console.log(results[2]);
+            done(results[2]);
         });
     };
     return PSD2IOS;

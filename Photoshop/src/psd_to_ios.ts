@@ -11,6 +11,7 @@ class PSD2IOS {
     this.jsonPath    = this.jsonDir + '/out.json';
     this.prefsFile   = path.join(process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'], 'psd2json.json');
     this.preferences = { path: this.filePath };
+    this.scriptPath  = path.join(__dirname, '../../', 'dist/psd2json.jsx');
     this.setup();
   }
 
@@ -22,9 +23,10 @@ class PSD2IOS {
     fs.writeFileSync(this.prefsFile, JSON.stringify(this.preferences));
   }
 
-  start() {
+  start(done) {
     var execPS = (done)=> {
-      exec('open /Users/gogo/code/node/ProjectMayhem/Photoshop/dist/psd2json.jsx', (error, stdout, stderr)=> {
+      console.log();
+      exec('open ' + this.scriptPath, (error, stdout, stderr)=> {
         done();
       });
     }
@@ -47,10 +49,10 @@ class PSD2IOS {
     }
 
     async.series([execPS, watchFile, getData], (err, results)=> {
-      console.log(results[2]);
+      done(results[2]);
     });
   }
 }
 
-// var a = new PSD2IOS('/Users/gogo/Desktop/photoshop/source1.psd');
-// a.start();
+//var a = new PSD2IOS('/Users/gogo/Desktop/photoshop/source1.psd');
+//a.start();
