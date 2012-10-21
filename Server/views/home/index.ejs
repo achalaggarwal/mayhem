@@ -2,9 +2,9 @@
 <header>
   <% if(user) {%>
   <ul class="nav">
+    <li><a href="/logout" class="">Logout</a></li>
     <li><a href="/convert" class="ybttn"><%= user.credits %> Credits</a></li>
     <li><a href="/account" class="lnk">Hi <%= user.username %></a></li>
-    <li><a href="/logout" class="lnk">Logout</a></li>
   </ul>
   <% } else { %>
   <ul>

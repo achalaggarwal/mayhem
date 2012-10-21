@@ -4,14 +4,40 @@
 <p><%= message %></p>
 <% } %>
 
-<h1>Account Management</h1>
+<div class="main">
+	<div class="header layout clear">
+	  <div id="logo" class="alignLeft fl">Logo</div>
+	  <ul class="nav">
+	    <li><a href="/convert" class="ybttn"><%= user.credits %> Credits</a></li>
+	    <li><a href="/account" class="lnk">Hi <%= user.username %></a></li>
+	    <li><a href="/logout" class="lnk">Logout</a></li>
+	  </ul>
+	</div>
+	<div class="whiteLayout layout" id="account">
+		<h2>Account Management</h2>
+		<div class="formField">
+			<div class="clear">
+				<label>Email:</label> 
+				<span><%= user.email %></span>
+			</div>
+			<div class="clear">
+				<label>Member Since:</label> 
+				<span><%= user.created_at %></span>
+			</div>
+			<div class="clear">
+				<label>Credits:</label> 
+				<span><%= user.credits %></span>
+			</div>
+			<div class='clear'>
+				<form method="POST" action="/account">
+					<label>New Password:</label>
+					<span>
+						<input name="password" type="password" />
+						<input type="submit" class="bttn"/>
+					</span>	
+				</form>
+			</div>
+		</div>	
+	</div>
+</div>	
 
-Email: <%= user.email %><br />
-Member Since: <%= user.created_at %><br />
-Credits: <%= user.credits %><br />
-
-<form method="POST" action="/account">
-<label>New Password</label>
-<input name="password" type="password" />
-<input type="submit" />
-</form>

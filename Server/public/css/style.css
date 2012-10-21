@@ -242,12 +242,16 @@ header ul li a:hover, header ul li a:focus {
   color: #8b4602;
 }
 
-header ul li .workLnk {
+header ul li a {
   font-size: 16px;
   color: #fefefe;
-  margin-right: 20px;
   font-family: 'KlavikaMedCaps-SC';
 }
+
+header ul li .workLnk, header ul li .lnk {
+  margin-right: 15px;
+}
+
 
 header .action {
   width: 860px;
@@ -1084,3 +1088,71 @@ table td.action a:hover, table td.action a:focus {
   height: 441px;
   width: 253px;
 }
+
+
+/*------------Account---------------------------*/
+
+.whiteLayout {
+  margin-bottom: 36px;
+  position: relative;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 0px 2px #dedddc;
+  border: 1px solid #DEDDDC;
+}
+
+.whiteLayout h2 {
+  width: 860px;
+  margin: 0 auto;
+  height: 115px;
+  font-size: 47px;
+  line-height: 115px;
+  background: url(../img/headerBkg.png) no-repeat left top;
+}
+
+
+.formField {
+  width: 540px;
+  margin: 36px auto;
+}
+
+.formField div {
+  margin: 0 0 10px 0;
+}
+
+.formField label {
+  color: #555555;
+  float: left;
+  font-size: 16px;
+  margin-right: 20px;
+  text-align: right;
+  width: 141px;
+  margin-top: 3px;
+}
+
+.formField span {
+  color: #333333;
+  float: left;
+  font-size: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
