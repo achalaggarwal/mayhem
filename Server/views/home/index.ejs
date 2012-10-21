@@ -35,39 +35,35 @@
       <div class="info" >
         <h3>Break down the barriers for design and developemnt</h3>
         <ul class="clear">
-          <li>
-            <a href="">Developer</a>
-            <div>
-              <p class="note">
-                Pellentesque habitant morbi tristique senectus et netus
-                malesuada fames ac turpis egestas. Vestibulum tortor
-                quam, feugiat vitae, ultricies eget, tempor sit amet, ante.
-                Donec eu libero sit amet quam egestas semper.
-              </p>
-              <ul class="points">
-                <li>advantage 1</li>
-                <li>advantage 2</li>
-                <li>advantage 3</li>
-              </ul>
-            </div>
-          </li>
-          <!--<li>
-            <a href="">Designer</a>
-            <div>
-              <p clas="note">
-                Pellentesque habitant morbi tristique senectus et netus
-                malesuada fames ac turpis egestas. Vestibulum tortor
-                quam, feugiat vitae, ultricies eget, tempor sit amet, ante.
-                Donec eu libero sit amet quam egestas semper.
-              </p>
-              <ul>
-                <li>advantage 1</li>
-                <li>advantage 2</li>
-                <li>advantage 3</li>
-              </ul>
-            </div>
-          </li>-->
+          <li><a href="#developer" class="active" onClick="selectTab(this, 0);">Developer</a></li>
+          <li><a href="#designer" onClick="selectTab(this, 1)">Designer</a></li>
         </ul>
+        <div id="developer-content" name="developer">
+          <p class="note">
+            Pellentesque habitant morbi tristique senectus et netus
+            malesuada fames ac turpis egestas. Vestibulum tortor
+            quam, feugiat vitae, ultricies eget, tempor sit amet, ante.
+            Donec eu libero sit amet quam egestas semper.
+          </p>
+          <ul class="points">
+            <li>advantage 1</li>
+            <li>advantage 2</li>
+            <li>advantage 3</li>
+          </ul>
+        </div>
+        <div id="designer-content" style="display:none;" name="designer"> 
+          <p clas="note">
+            Pellentesque habitant morbi tristique senectus et netus
+            malesuada fames ac turpis egestas. Vestibulum tortor
+            quam, feugiat vitae, ultricies eget, tempor sit amet, ante.
+            Donec eu libero sit amet quam egestas semper.
+          </p>
+          <ul>
+            <li>advantage 1</li>
+            <li>advantage 2</li>
+            <li>advantage 3</li>
+          </ul>
+        </div>
         <div class="actions">
           <a href="">Xcode Project</a>
           <a href="">PSD Design</a>
@@ -176,4 +172,20 @@ $('#upload').bind('click', function() {
     });
   });
 });
+
+function selectTab(me, tab) {
+  $('#designer-content').hide();
+  $('#developer-content').hide();
+  $($(me).parent().parent().children()[0]).children().removeClass('active');
+  $($(me).parent().parent().children()[1]).children().removeClass('active');
+  $(me).addClass('active');
+  switch(tab) {
+    case 0:
+      $('#developer-content').show();
+    break;
+    case 1:
+      $('#designer-content').show();
+    break;
+  }
+}
 </script>
