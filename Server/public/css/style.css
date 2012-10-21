@@ -863,6 +863,7 @@ table th {
 
 table td {
   padding: 12px 0;
+  vertical-align: middle;
 }
 
 table td.title {
