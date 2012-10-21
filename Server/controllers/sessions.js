@@ -57,7 +57,7 @@ module.exports = function (passport) {
         });
       }
       else {
-        res.render('sessions/account', { title: 'Account Management', message: null , user: req.user});
+        res.render('sessions/account', { title: 'Account Management', message: "Password can not be empty" , user: req.user});
       }
     },
     
