@@ -1,5 +1,5 @@
 {
-  "name": "PS Plugin",
+  "name": "PSPlugin",
   "version": "0.1.0",
   "description": "Photoshop plugin to convert PSD to JSON",
   "author": {
@@ -9,5 +9,9 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:achalaggarwal/mayhem.git"
+  },
+  "dependencies"  : {
+    "async" : "0.1.22",
+    "wrench" : "1.3.9"
   }
 }
