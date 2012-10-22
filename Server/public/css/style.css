@@ -413,9 +413,11 @@ header .action p {
 
 #developer-content .note, #designer-content .note {
   color: #FFFFFF;
-  font-size: 17px;
-  line-height: 23px;
+  font-size: 16px;
+  line-height: 24px;
   margin: 18px 0 0;
+  width: 455px;
+  padding: 0 5px;
   font-family: 'KlavikaRegular-OSF';
 }
 
