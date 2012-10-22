@@ -1,10 +1,20 @@
 function cTID(s) { return app.charIDToTypeID(s); }
 function sTID(s) { return app.stringIDToTypeID(s); }
 
-function main() {
-  var exporter = new JSONExporter("~/Desktop/photoshop/source1.psd", app, preferences);
+function main(options:string) {
+  var exporter = new PSD2JSON(options, app, preferences);
   exporter.process();
   return true;
 }
 
-main();
+function parsePreferences() {
+  var b = new File("~/psd2json.json");
+  b.open('r');
+  var str = "";
+  while(!b.eof)
+  str += b.readln();
+  b.close();
+  return JSON.parse(str);
+}
+
+main(parsePreferences());

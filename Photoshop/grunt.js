@@ -13,18 +13,18 @@ module.exports = function(grunt) {
     },
     typescript: {
       base: {
-        src: ['src/json_exporter.ts', 'src/main.ts', 'src/json_normalize.ts', 'src/psd_to_ios.ts'],
+        src: ['src/psd_to_json.ts', 'src/main.ts', 'src/json_to_ios.ts', 'src/psd_to_ios.ts'],
         dest: 'lib'
       }
     },
     concat: {
       dist: {
-        src: ['lib/js_beautify.js', 'lib/json2.js', 'lib/async.min.js', '<banner:meta.banner>', 'lib/src/json_exporter.js', 'lib/src/main.js'],
+        src: ['lib/js_beautify.js', 'lib/json2.js', 'lib/async.min.js', '<banner:meta.banner>', 'lib/src/psd_to_json.js', 'lib/src/main.js'],
         dest: 'dist/psd2json.jsx'
       }
     },
     watch: {
-      files: ['src/json_exporter.ts', 'src/main.ts', 'src/json_normalize.ts', 'src/psd_to_ios.ts'],
+      files: ['src/psd_to_json.ts', 'src/main.ts', 'src/json_to_ios.ts', 'src/psd_to_ios.ts'],
       tasks: 'typescript concat'
     }
   });

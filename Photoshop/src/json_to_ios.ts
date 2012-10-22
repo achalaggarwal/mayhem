@@ -1,8 +1,7 @@
 var fs = require('fs');
 
-class JSONNormalize {
-  constructor(public file_path:string){
-    this.json = JSON.parse(fs.readFileSync(file_path));
+class JSON2IOS {
+  constructor(public json:any){
     this.data = {};
     this.data.width  = this.json.dimensions.width;
     this.data.height = this.json.dimensions.height;
@@ -72,11 +71,9 @@ class JSONNormalize {
     return "{{x1,y1},{width,height}}".replace('x1', dimensions.left).replace('y1', dimensions.top).replace('width', dimensions.width).replace('height', dimensions.height)
   }
 
-  start(){
-    console.log(JSON.stringify(this.normalize(this.json), null, 2)); 
+  convert(){
+    return this.normalize(this.json);
   }
 }
 
-
-var n = new JSONNormalize('/Users/gogo/Desktop/photoshop/source1-psd-export/out.json');
-n.start();
+exports.JSON2IOS = JSON2IOS;
