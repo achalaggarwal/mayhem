@@ -23,7 +23,9 @@ User.resetAccount = function(email, cb) {
  */
  
 User.prototype.randomPassword = function() {
-  this.updatePassword(randomString(8), function(err, success) {
+  var me = this;
+  var newPassword = randomString(8);
+  this.updatePassword(newPassword, function(err, success) {
     if (success) {
       //send new password in email
       var sendgrid = new SendGrid('bhaveshdhupar', '~bhavesh');
@@ -46,8 +48,8 @@ User.prototype.randomPassword = function() {
  */
 
 User.prototype.updatePassword = function(password, cb) {
-  var me = this;
-  var salt = me.salt;
+  console.log(this);
+  var salt = this.salt;
   var newPassword = password;
   
   if (newPassword.length < 5) {
@@ -55,8 +57,8 @@ User.prototype.updatePassword = function(password, cb) {
     return;
   }
   
-  me.passwordHash = md5(newPassword + salt);
-  me.save(function(err) {
+  this.passwordHash = md5(newPassword + salt);
+  this.save(function(err) {
     if (err) {
       cb(err, false);
       return;
