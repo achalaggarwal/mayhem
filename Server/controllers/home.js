@@ -19,7 +19,7 @@ exports.addUser = function(req, res) {
   
   User.create(req.body, function(err, user) {
     if (err && err.length > 0) {
-      res.render('home/register', { title: 'Register', message: err.join()});
+      res.render('home/register', { title: 'Register', message: err.join(), object: null});
       return;
     }
     else {
