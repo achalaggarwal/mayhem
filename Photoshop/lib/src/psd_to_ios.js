@@ -9,7 +9,6 @@ var PSD2IOS = (function () {
     function PSD2IOS(filePath, exportDir) {
         this.filePath = filePath;
         this.exportDir = exportDir;
-        this.imagesDir = path.join(this.exportDir, 'images');
         this.jsonPath = path.join(this.exportDir, 'out.json');
         this.prefsFile = path.join(process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'], 'psd2json.json');
         this.preferences = {
@@ -21,14 +20,11 @@ var PSD2IOS = (function () {
         this.setup();
     }
     PSD2IOS.prototype.setup = function () {
-        if(fs.existsSync(this.imagesDir)) {
-            wrench.rmdirSyncRecursive(this.imagesDir);
+        if(fs.existsSync(this.exportDir)) {
+            wrench.rmdirSyncRecursive(this.exportDir);
         }
         if(!fs.existsSync(this.exportDir)) {
             fs.mkdirSync(this.exportDir);
-        }
-        if(!fs.existsSync(this.imagesDir)) {
-            fs.mkdirSync(this.imagesDir);
         }
         fs.writeFileSync(this.jsonPath, '');
         fs.writeFileSync(this.prefsFile, JSON.stringify(this.preferences));

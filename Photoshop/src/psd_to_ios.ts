@@ -7,7 +7,6 @@ var fs    = require('fs')
 
 class PSD2IOS {
   constructor(public filePath:string, public exportDir:string) {
-    this.imagesDir   = path.join(this.exportDir, 'images');
     this.jsonPath    = path.join(this.exportDir, 'out.json');
     this.prefsFile   = path.join(process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'], 'psd2json.json');
     this.preferences = { source: this.filePath, target: this.exportDir, jsonCache: this.jsonPath };
@@ -16,12 +15,10 @@ class PSD2IOS {
   }
 
   setup() {
-    if (fs.existsSync(this.imagesDir))
-      wrench.rmdirSyncRecursive(this.imagesDir);
+    if (fs.existsSync(this.exportDir))
+      wrench.rmdirSyncRecursive(this.exportDir);
     if (!fs.existsSync(this.exportDir))
       fs.mkdirSync(this.exportDir);
-    if (!fs.existsSync(this.imagesDir))
-      fs.mkdirSync(this.imagesDir);
     fs.writeFileSync(this.jsonPath, '');
     fs.writeFileSync(this.prefsFile, JSON.stringify(this.preferences));
   }
