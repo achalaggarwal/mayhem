@@ -8,7 +8,7 @@
   
 var jobStatus = {
   "Initiated" : 0,
-  "Uploaded" : 1,
+  "Uploading" : 1,
   "Failed" : 2,
   "PSDProcessing" : 3,
   "JSONProcessing" : 4,
@@ -21,8 +21,8 @@ var jobStatus = {
  
 Job.prototype.statusMessage = function() {
   
-  if (this.status === 0)
-    this.process();
+  // if (this.status === 0)
+  //   this.process();
   
   var keys = [];
   for(var i in jobStatus) if (jobStatus.hasOwnProperty(i))
