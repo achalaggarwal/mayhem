@@ -29,8 +29,7 @@ var fs = require('fs');
   
   var toJSON = function(psdpath, done) {
     // currentJob.saveStatus(3);
-    var _tempPath = path.join(__dirname, 'tmp');
-    console.log(_tempPath);
+    var _tempPath = path.join(__dirname, 'tmp', 'images');
     var a = new PSD2IOS(psdpath, _tempPath);
     a.convert(function(data){
       console.log(data);
@@ -41,20 +40,18 @@ var fs = require('fs');
 
   var toProject = function(data, assetsPath, done) {
     // currentJob.saveStatus(4);
-    console.log(data);
-    done(null, 'done');
-    
     // console.log("convert to project");
     
-    // jsonui.convertToApp(__dirname + '/input.json', function(err, outputPath) {
-    // if (err) { console.log(err); return; }
-    //   console.log(outputPath);
-    // });
-    
-    
+    jsonui.convertToApp(data, assetsPath, function(err, outputPath) {
+        if (err) {
+          done(err, 'done');
+          return;
+        }
+        console.log(outputPath);
+        done(null, 'done');
+    });
     // // currentJob.saveStatus(5);
     // currentJob = null;
-
   };
 
   var listenDB = function(callback) {

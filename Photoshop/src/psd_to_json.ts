@@ -311,6 +311,6 @@ class PSD2JSON {
       }
     }
 
-    return parsed;
+    return parsed.reverse();
   }
 }

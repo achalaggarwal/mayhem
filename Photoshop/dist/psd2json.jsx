@@ -2020,7 +2020,7 @@ var PSD2JSON = (function () {
                 parsed = parsed.concat(a);
             }
         }
-        return parsed;
+        return parsed.reverse();
     };
     return PSD2JSON;
 })();

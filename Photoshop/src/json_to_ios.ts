@@ -2,21 +2,20 @@ var fs = require('fs');
 
 class JSON2IOS {
   constructor(public json:any){
-    this.data = {};
-    this.data.width  = this.json.dimensions.width;
-    this.data.height = this.json.dimensions.height;
-    this.data.objects = [];
   }
 
   normalize(data){
     var x1=9999,y1=9999,x2=0,y2=0,control,controls=[],out={};
 
     if (!data.objects) {
-      out.dimensions = data.dimensions;
-      out.type       = data.type;
+      out.dimensions = { left: data.dimensions.left/2, top: data.dimensions.top/2, width: data.dimensions.width/2, height: data.dimensions.height/2 };
+      out.type       = (data.type || 'Image').toLowerCase();
       out.frame      = this.stringify(out.dimensions);
-
-      if (data.type == 'Button') {
+      
+      if (out.type == 'background')
+        out.type = 'image';
+      
+      if (data.type == 'button') {
         if (data.text) {
           out.background = data.image || "";
         } else {
@@ -27,10 +26,15 @@ class JSON2IOS {
       }
 
       if (data.text) {
-        out.text = data.text.details.text;
-        out.font = data.text.details.font;
-        out.fontSize = data.text.details.size || 17;
+        out.text      = data.text.details.text;
+        out.font      = data.text.details.font;
+        out.fontsize  = data.text.details.size || 17;
         out.fontcolor = [data.text.details.red/255, data.text.details.blue/255, data.text.details.green/255, 1.0];
+      } else if (data.type == 'button' || data.type == "textfield") {
+        out.text      = "";
+        out.font      = "Helvetica";
+        out.fontsize  = 17;
+        out.fontcolor = [0, 0, 0, 1.0];
       }
 
     } else {
@@ -58,9 +62,9 @@ class JSON2IOS {
         control.frame = this.stringify(control.dimensions);
       }
 
-      out.dimensions = { left: x1, top: y1, width: x2-x1, height: y2-y1 };
+      out.dimensions = { left: x1, top: y1, width: (x2-x1), height: (y2-y1) };
       out.frame      = this.stringify(out.dimensions);
-      out.type       = 'View';
+      out.type       = 'view';
       out.objects    = controls;
     }
 
@@ -72,7 +76,18 @@ class JSON2IOS {
   }
 
   convert(){
-    return this.normalize(this.json);
+    this.data         = this.normalize(this.json);
+    this.data.appname = "TestApp";
+    this.data.navbar  = {
+      "hidden"            : 1,
+      "background"        : ""
+    };
+    
+    this.data.device = 0;
+    this.data.width  = this.json.dimensions.width/2;
+    this.data.height = this.json.dimensions.height/2;
+    
+    return this.data;
   }
 }
 
