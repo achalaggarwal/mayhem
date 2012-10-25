@@ -13,15 +13,10 @@ class PSD2JSON {
     this.doc                = this.app.activeDocument;
     this.mainDoc            = this.doc;
     this.doc                = this.mainDoc.duplicate();
-
-    this.folder       = new Folder(this.exportDir);
-    var imagesFolder  = new Folder(this.exportDir +"/images");
+    this.folder             = new Folder(this.exportDir);
 
     if(!this.folder.exists)
       this.folder.create();
-
-    if(!imagesFolder.exists)
-      imagesFolder.create();
   }
 
   process(){
@@ -120,15 +115,15 @@ class PSD2JSON {
   }
 
   saveLayerAndClose(layer, doc, name) {
-    var imgRelPath         = "images/" + name + ".png";
-    layer.path             = this.folder.fullName + "/" + imgRelPath;
+    name                   = name + ".png"
+    layer.path             = this.folder.fullName + "/" + name;
     var saveOptions        = new PNGSaveOptions;
     saveOptions.interlaced = false;
 
     doc.saveAs(new File(layer.path), saveOptions, true, Extension.LOWERCASE);
     doc.close(SaveOptions.DONOTSAVECHANGES);
 
-    return layer.path;
+    return name;
   }
 
   render(layer, guessedName){
@@ -244,8 +239,7 @@ class PSD2JSON {
         outLayer.dimensions.top   += outLayer.dimensions.height - helperDoc.height.value;
         outLayer.dimensions.width  = helperDoc.width.value;
         outLayer.dimensions.height = helperDoc.height.value;
-
-        outLayer.image = this.saveLayerAndClose(helperLayer, helperDoc, outLayer.layer_name);
+        outLayer.image             = this.saveLayerAndClose(helperLayer, helperDoc, outLayer.layer_name);
       }
 
       if (outLayer.dimensions.left < 0) outLayer.dimensions.left = 0;

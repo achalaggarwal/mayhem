@@ -12,12 +12,8 @@ var PSD2JSON = (function () {
         this.mainDoc = this.doc;
         this.doc = this.mainDoc.duplicate();
         this.folder = new Folder(this.exportDir);
-        var imagesFolder = new Folder(this.exportDir + "/images");
         if(!this.folder.exists) {
             this.folder.create();
-        }
-        if(!imagesFolder.exists) {
-            imagesFolder.create();
         }
     }
     PSD2JSON.prototype.process = function () {
@@ -129,13 +125,13 @@ var PSD2JSON = (function () {
         }
     };
     PSD2JSON.prototype.saveLayerAndClose = function (layer, doc, name) {
-        var imgRelPath = "images/" + name + ".png";
-        layer.path = this.folder.fullName + "/" + imgRelPath;
+        name = name + ".png";
+        layer.path = this.folder.fullName + "/" + name;
         var saveOptions = new PNGSaveOptions();
         saveOptions.interlaced = false;
         doc.saveAs(new File(layer.path), saveOptions, true, Extension.LOWERCASE);
         doc.close(SaveOptions.DONOTSAVECHANGES);
-        return layer.path;
+        return name;
     };
     PSD2JSON.prototype.render = function (layer, guessedName) {
         var isVisible = true;
