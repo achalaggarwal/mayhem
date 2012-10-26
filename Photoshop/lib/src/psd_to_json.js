@@ -25,6 +25,7 @@ var PSD2JSON = (function () {
             height: parseInt(this.doc.height)
         };
         this.cleanUpLayers(this.doc.layers);
+        return;
         var traversed = this.traverse(this.doc.layers);
         this.doc.close(SaveOptions.DONOTSAVECHANGES);
         this.mainDoc.close(SaveOptions.DONOTSAVECHANGES);
@@ -290,8 +291,10 @@ var PSD2JSON = (function () {
             if(newLayer.parent.layers.length > 1) {
                 newLayer.move(newLayer.parent.layers[newLayer.parent.layers.length - 1], ElementPlacement.PLACEAFTER);
             }
-            for(var i in _mergeLayers) {
-                _layer = _mergeLayers.reverse()[i];
+            for(var i = 0; i < _mergeLayers.length; i++) {
+                _layer = _mergeLayers[_mergeLayers.length - 1 - i];
+                $.writeln(_layer.name);
+                $.writeln(_layer.kind);
                 _layer.move(newLayer, ElementPlacement.INSIDE);
             }
             newLayer.merge();

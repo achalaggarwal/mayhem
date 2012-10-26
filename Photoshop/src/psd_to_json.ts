@@ -22,12 +22,16 @@ class PSD2JSON {
   process(){
     this.preferences.rulerUnits = Units.PIXELS;
     var dimensions = { top: 0, left: 0, width: parseInt(this.doc.width), height: parseInt(this.doc.height) };
-    this.cleanUpLayers(this.doc.layers);
+
+    this.cleanUpLayers(this.doc.layers); return;
     var traversed = this.traverse(this.doc.layers);
+
     this.doc.close(SaveOptions.DONOTSAVECHANGES);
     this.mainDoc.close(SaveOptions.DONOTSAVECHANGES);
+
     traversed = { dimensions: dimensions, objects: traversed };
     this.preferences.rulerUnits = this.originalRulerUnits;
+
     var file = new File(this.jsonCache);
     file.open('w');
     file.writeln(js_beautify(JSON.stringify(traversed), {indent_size: 2, indent_char: ' '}));
@@ -277,8 +281,8 @@ class PSD2JSON {
         newLayer.move(newLayer.parent.layers[newLayer.parent.layers.length-1], ElementPlacement.PLACEAFTER);
       }
 
-      for(var i in _mergeLayers) {
-        _layer = _mergeLayers.reverse()[i];
+      for(var i = 0; i < _mergeLayers.length; i++) {
+        _layer = _mergeLayers[_mergeLayers.length-1 - i];
         _layer.move(newLayer, ElementPlacement.INSIDE);
       }
 
