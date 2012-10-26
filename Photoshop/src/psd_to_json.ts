@@ -197,7 +197,7 @@ class PSD2JSON {
         try { textStyle   = tsr0.getObjectValue(cTID("TxtS")); } catch(ex){}
         try { color       = textStyle.getObjectValue(cTID("Clr ")); } catch(ex){}
         try { autoLeading = textStyle.getBoolean(sTID("autoLeading")); } catch(ex){}
-        try { size        = parseInt(textStyle.getUnitDoubleValue(cTID("Sz  ", pts))); } catch(ex){}
+        try { size        = parseInt(textStyle.getUnitDoubleValue(cTID("Sz  ", 'pts'))); } catch(ex){}
         try { leading     = autoLeading ? false : textStyle.getUnitDoubleValue(cTID("Ldng")); } catch(ex){}
         try { text        = ti.contents; } catch(ex){}
         try { font        = textStyle.getString(cTID("FntN")); } catch(ex){}
@@ -213,10 +213,6 @@ class PSD2JSON {
           text  : text,
           font  : font || 'Helvetica'
         };
-
-        if (size > maxFontSize) {
-          maxFontSize = size;
-        }
 
         if (!autoLeading) {
           if (leading > maxLineHeight) {

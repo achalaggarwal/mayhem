@@ -1898,7 +1898,7 @@ var PSD2JSON = (function () {
                 } catch (ex) {
                 }
                 try  {
-                    size = parseInt(textStyle.getUnitDoubleValue(cTID("Sz  ", pts)));
+                    size = parseInt(textStyle.getUnitDoubleValue(cTID("Sz  ", 'pts')));
                 } catch (ex) {
                 }
                 try  {
@@ -1933,9 +1933,6 @@ var PSD2JSON = (function () {
                     text: text,
                     font: font || 'Helvetica'
                 };
-                if(size > maxFontSize) {
-                    maxFontSize = size;
-                }
                 if(!autoLeading) {
                     if(leading > maxLineHeight) {
                         maxLineHeight = leading;
