@@ -9,23 +9,23 @@ var fs = require('fs');
   var currentJob = null;
   
   var download = function(done) {
-    // currentJob.saveStatus(1);
+    currentJob.saveStatus(1);
     var _tempPath = path.join(__dirname, 'tmp', 'temp.psd');
     //Uncomment the following code to download file from filepicker.io instead of using local file
-    // var _fileStream = fs.createWriteStream(_tempPath);
-    // _fileStream.on('error', function (err) {
-    //   done(err);
-    // });
+    var _fileStream = fs.createWriteStream(_tempPath);
+    _fileStream.on('error', function (err) {
+      done(err);
+    });
     
-    // _fileStream.on('close', function(){
-    //   done(null, _tempPath);
-    // });
-    // request(currentJob.url).pipe(_fileStream);
-    done(null, _tempPath);
+    _fileStream.on('close', function(){
+      done(null, _tempPath);
+    });
+    request(currentJob.url).pipe(_fileStream);
+    // done(null, _tempPath);
   };
   
   var toJSON = function(psdpath, done) {
-    // currentJob.saveStatus(3);
+    currentJob.saveStatus(3);
     var _tempPath = path.join(__dirname, 'tmp', 'images');
     var a = new PSD2IOS(psdpath, _tempPath);
     a.convert(function(data){
@@ -34,7 +34,7 @@ var fs = require('fs');
   };
 
   var toProject = function(data, assetsPath, done) {
-    // currentJob.saveStatus(4);
+    currentJob.saveStatus(4);
     
     var filePath = path.join(__dirname, 'tmp', 'output.json');
     var _assetsPath = path.join(__dirname, 'tmp', 'images');
@@ -62,11 +62,11 @@ var fs = require('fs');
             console.log(err);
             console.log(results);
             // Update output path in db record for currentJob
-            // currentJob.saveStatus(5);
-            // currentJob = null;
+             currentJob.saveStatus(5);
+             currentJob = null;
             
             //Remove the next line if you want to continue the processing
-            process.exit(0);
+            //process.exit(0);
             
             callback(null);
           });
