@@ -10,8 +10,8 @@ var fs = require('fs');
   
   var download = function(done) {
     // currentJob.saveStatus(1);
-    
     var _tempPath = path.join(__dirname, 'tmp', 'temp.psd');
+    //Uncomment the following code to download file from filepicker.io instead of using local file
     // var _fileStream = fs.createWriteStream(_tempPath);
     // _fileStream.on('error', function (err) {
     //   done(err);
@@ -20,10 +20,7 @@ var fs = require('fs');
     // _fileStream.on('close', function(){
     //   done(null, _tempPath);
     // });
-    
     // request(currentJob.url).pipe(_fileStream);
-    console.log("download to location");
-    
     done(null, _tempPath);
   };
   
@@ -32,26 +29,21 @@ var fs = require('fs');
     var _tempPath = path.join(__dirname, 'tmp', 'images');
     var a = new PSD2IOS(psdpath, _tempPath);
     a.convert(function(data){
-      console.log(data);
       done(null, data, _tempPath);
     });
-    // done(null, 'convert to json');
   };
 
   var toProject = function(data, assetsPath, done) {
     // currentJob.saveStatus(4);
-    // console.log("convert to project");
     
+    var filePath = path.join(__dirname, 'tmp', 'output.json');
+    var _assetsPath = path.join(__dirname, 'tmp', 'images');
+  
     jsonui.convertToApp(data, assetsPath, function(err, outputPath) {
-        if (err) {
-          done(err, 'done');
-          return;
-        }
-        console.log(outputPath);
-        done(null, 'done');
+      if (err) { done(err); return; }
+      console.log(outputPath);
+      done(null, outputPath);
     });
-    // // currentJob.saveStatus(5);
-    // currentJob = null;
   };
 
   var listenDB = function(callback) {
@@ -69,6 +61,13 @@ var fs = require('fs');
           function(err, results) {
             console.log(err);
             console.log(results);
+            // Update output path in db record for currentJob
+            // currentJob.saveStatus(5);
+            // currentJob = null;
+            
+            //Remove the next line if you want to continue the processing
+            process.exit(0);
+            
             callback(null);
           });
       }
@@ -78,10 +77,7 @@ var fs = require('fs');
     });
   };
 
-  var processing;
-  processing = function() {
-    console.log("called processing");
-    console.log(listenDB);
+  var processing = function() {
     async.whilst(
       function() { return true; },
       listenDB,
@@ -89,6 +85,5 @@ var fs = require('fs');
         async.nextTick(processing);
       });
   };
-  
   processing();
 })();
