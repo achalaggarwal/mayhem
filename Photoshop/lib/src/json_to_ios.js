@@ -42,7 +42,7 @@ var JSON2IOS = (function () {
             if(data.text) {
                 out.text = data.text.text;
                 out.font = data.text.font;
-                out.fontsize = data.text.size || 17;
+                out.fontsize = (data.text.size || 34) / 2;
                 out.fontcolor = [
                     data.text.red / 255, 
                     data.text.blue / 255, 

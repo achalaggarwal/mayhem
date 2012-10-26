@@ -35,7 +35,7 @@ class JSON2IOS {
       if (data.text) {
         out.text      = data.text.text;
         out.font      = data.text.font;
-        out.fontsize  = data.text.size || 17;
+        out.fontsize  = (data.text.size || 34)/2;
         out.fontcolor = [data.text.red/255, data.text.blue/255, data.text.green/255, 1.0];
       } else if (out.type == 'button' || out.type == "textfield") {
         out.text      = "";
