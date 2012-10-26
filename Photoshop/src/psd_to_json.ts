@@ -86,11 +86,28 @@ class PSD2JSON {
 
     this.app.activeDocument = helperDoc;
 
-    for (var i in _remove) {
+    for (var i=0; i< _remove.length; i++) {
       _remove[i].remove();
     }
 
     return _properties;
+  }
+
+  removeSiblings(layer, parent) {
+    var _layer;
+
+    for (var i=0; i< parent.layers.length; i++) {
+      _layer = parent.layers[i];
+      if (_layer.typename == "LayerSet" && _layer.name != layer.name) {
+        this.removeSiblings(layer, _layer);
+      } else if (_layer.name != layer.name) {
+        _layer.visible = false;
+      } else {
+        _layer.visible = true;
+      }
+    }
+
+    return true;
   }
 
   trimLayer(layer, doc) {
@@ -224,6 +241,8 @@ class PSD2JSON {
       } else {
         var helperDoc = this.doc.duplicate(),
           helperLayer = helperDoc.activeLayer;
+
+        this.removeSiblings(helperLayer, helperDoc);
 
         if (guessedName == 'Button'
          || guessedName == 'TextField'

@@ -25,10 +25,7 @@ var PSD2JSON = (function () {
             height: parseInt(this.doc.height)
         };
         this.cleanUpLayers(this.doc.layers);
-        return;
         var traversed = this.traverse(this.doc.layers);
-        this.doc.close(SaveOptions.DONOTSAVECHANGES);
-        this.mainDoc.close(SaveOptions.DONOTSAVECHANGES);
         traversed = {
             dimensions: dimensions,
             objects: traversed
@@ -99,10 +96,26 @@ var PSD2JSON = (function () {
             }
         }
         this.app.activeDocument = helperDoc;
-        for(var i in _remove) {
+        for(var i = 0; i < _remove.length; i++) {
             _remove[i].remove();
         }
         return _properties;
+    };
+    PSD2JSON.prototype.removeSiblings = function (layer, parent) {
+        var _layer;
+        for(var i = 0; i < parent.layers.length; i++) {
+            _layer = parent.layers[i];
+            if(_layer.typename == "LayerSet" && _layer.name != layer.name) {
+                this.removeSiblings(layer, _layer);
+            } else {
+                if(_layer.name != layer.name) {
+                    _layer.visible = false;
+                } else {
+                    _layer.visible = true;
+                }
+            }
+        }
+        return true;
     };
     PSD2JSON.prototype.trimLayer = function (layer, doc) {
         doc.crop(layer.bounds);
@@ -243,6 +256,7 @@ var PSD2JSON = (function () {
                 var helperDoc = this.doc.duplicate();
                 var helperLayer = helperDoc.activeLayer;
 
+                this.removeSiblings(helperLayer, helperDoc);
                 if(guessedName == 'Button' || guessedName == 'TextField' || guessedName == 'NavigationBar' || guessedName == 'Label') {
                     outLayer.text = this.removeControlLayers(layer, helperLayer, helperDoc);
                 }
@@ -293,8 +307,6 @@ var PSD2JSON = (function () {
             }
             for(var i = 0; i < _mergeLayers.length; i++) {
                 _layer = _mergeLayers[_mergeLayers.length - 1 - i];
-                $.writeln(_layer.name);
-                $.writeln(_layer.kind);
                 _layer.move(newLayer, ElementPlacement.INSIDE);
             }
             newLayer.merge();
