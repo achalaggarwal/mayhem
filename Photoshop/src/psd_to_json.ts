@@ -23,7 +23,7 @@ class PSD2JSON {
     this.preferences.rulerUnits = Units.PIXELS;
     var dimensions = { top: 0, left: 0, width: parseInt(this.doc.width), height: parseInt(this.doc.height) };
 
-    this.cleanUpLayers(this.doc.layers); return;
+    this.cleanUpLayers(this.doc.layers);
     var traversed = this.traverse(this.doc.layers);
 
     this.doc.close(SaveOptions.DONOTSAVECHANGES);

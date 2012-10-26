@@ -19,7 +19,7 @@ class JSON2IOS {
       out.type       = (data.type || 'Image').toLowerCase();
       out.frame      = this.stringify(out.dimensions);
       
-      if (out.type == 'Background')
+      if (out.type == 'background')
         out.type = 'image';
       
       if (out.type == 'button') {
