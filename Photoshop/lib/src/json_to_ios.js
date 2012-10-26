@@ -14,6 +14,11 @@ var JSON2IOS = (function () {
         };
 
         if(!data.objects) {
+            if(data.type == 'NavigationBar') {
+                this.navBar = data;
+                console.log(this.navBar);
+                return null;
+            }
             out.dimensions = {
                 left: data.dimensions.left / 2,
                 top: data.dimensions.top / 2,
@@ -22,10 +27,10 @@ var JSON2IOS = (function () {
             };
             out.type = (data.type || 'Image').toLowerCase();
             out.frame = this.stringify(out.dimensions);
-            if(out.type == 'background') {
+            if(out.type == 'Background') {
                 out.type = 'image';
             }
-            if(data.type == 'button') {
+            if(out.type == 'button') {
                 if(data.text) {
                     out.background = data.image || "";
                 } else {
@@ -45,7 +50,7 @@ var JSON2IOS = (function () {
                     1
                 ];
             } else {
-                if(data.type == 'button' || data.type == "textfield") {
+                if(out.type == 'button' || out.type == "textfield") {
                     out.text = "";
                     out.font = "Helvetica";
                     out.fontsize = 17;
@@ -60,7 +65,10 @@ var JSON2IOS = (function () {
         } else {
             for(var i = 0; i < data.objects.length; i++) {
                 control = data.objects[i];
-                controls = controls.concat(this.normalize(control));
+                var normalized_objects = this.normalize(control);
+                if(normalized_objects !== null) {
+                    controls = controls.concat(normalized_objects);
+                }
             }
             for(var i = 0; i < controls.length; i++) {
                 control = controls[i];
@@ -102,9 +110,16 @@ var JSON2IOS = (function () {
         this.data = this.normalize(this.json);
         this.data.appname = "TestApp";
         this.data.navbar = {
-            "hidden": 1,
-            "background": ""
+            "hidden": (this.navBar.image.length > 0) ? 0 : 1,
+            "background": this.navBar.image
         };
+        if(this.navBar.image.length > 0) {
+            for(var i = 0; i < this.data.objects.length; i++) {
+                var _object = this.data.objects[i];
+                _object.dimensions.top -= 44;
+                _object.frame = this.stringify(_object.dimensions);
+            }
+        }
         this.data.device = 0;
         this.data.width = this.json.dimensions.width / 2;
         this.data.height = this.json.dimensions.height / 2;
