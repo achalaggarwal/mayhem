@@ -40,13 +40,13 @@ var JSON2IOS = (function () {
                 out.image = data.image;
             }
             if(data.text) {
-                out.text = data.text.details.text;
-                out.font = data.text.details.font;
-                out.fontsize = data.text.details.size || 17;
+                out.text = data.text.text;
+                out.font = data.text.font;
+                out.fontsize = data.text.size || 17;
                 out.fontcolor = [
-                    data.text.details.red / 255, 
-                    data.text.details.blue / 255, 
-                    data.text.details.green / 255, 
+                    data.text.red / 255, 
+                    data.text.blue / 255, 
+                    data.text.green / 255, 
                     1
                 ];
             } else {
@@ -109,16 +109,23 @@ var JSON2IOS = (function () {
     JSON2IOS.prototype.convert = function () {
         this.data = this.normalize(this.json);
         this.data.appname = "TestApp";
-        this.data.navbar = {
-            "hidden": (this.navBar.image.length > 0) ? 0 : 1,
-            "background": this.navBar.image
-        };
-        if(this.navBar.image.length > 0) {
-            for(var i = 0; i < this.data.objects.length; i++) {
-                var _object = this.data.objects[i];
-                _object.dimensions.top -= 44;
-                _object.frame = this.stringify(_object.dimensions);
+        if(this.navBar) {
+            this.data.navbar = {
+                "hidden": (this.navBar.image.length > 0) ? 0 : 1,
+                "background": this.navBar.image
+            };
+            if(this.navBar.image.length > 0) {
+                for(var i = 0; i < this.data.objects.length; i++) {
+                    var _object = this.data.objects[i];
+                    _object.dimensions.top -= 44;
+                    _object.frame = this.stringify(_object.dimensions);
+                }
             }
+        } else {
+            this.data.navbar = {
+                "hidden": 1,
+                "background": null
+            };
         }
         this.data.device = 0;
         this.data.width = this.json.dimensions.width / 2;

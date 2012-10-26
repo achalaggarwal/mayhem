@@ -90,7 +90,8 @@ class PSD2JSON {
       _remove[i].remove();
     }
 
-    return _properties;
+    if (_properties && _properties.text)
+      return _properties.text;
   }
 
   removeSiblings(layer, parent) {
@@ -156,7 +157,7 @@ class PSD2JSON {
       this.app.activeDocument.activeLayer = layer;
 
       var outLayer = {
-        type: guessedName,
+        type: (guessedName || 'Image'),
         layer_name: layer.name.replace(/\W+/g, '-'),
         dimensions: {
           left   : layer.bounds[0].value,
@@ -235,8 +236,8 @@ class PSD2JSON {
           // we aren't sure whether the layer is single-line but chances are high in this case
           outLayer.dimensions.line_height = outLayer.dimensions.height;
         }
-
-        outLayer.details = details;
+        outLayer.type  = 'Label';
+        outLayer.text  = details;
 
       } else {
         var helperDoc = this.doc.duplicate(),

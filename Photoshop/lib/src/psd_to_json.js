@@ -26,6 +26,8 @@ var PSD2JSON = (function () {
         };
         this.cleanUpLayers(this.doc.layers);
         var traversed = this.traverse(this.doc.layers);
+        this.doc.close(SaveOptions.DONOTSAVECHANGES);
+        this.mainDoc.close(SaveOptions.DONOTSAVECHANGES);
         traversed = {
             dimensions: dimensions,
             objects: traversed
@@ -99,7 +101,9 @@ var PSD2JSON = (function () {
         for(var i = 0; i < _remove.length; i++) {
             _remove[i].remove();
         }
-        return _properties;
+        if(_properties && _properties.text) {
+            return _properties.text;
+        }
     };
     PSD2JSON.prototype.removeSiblings = function (layer, parent) {
         var _layer;
@@ -154,7 +158,7 @@ var PSD2JSON = (function () {
             layer.visible = true;
             this.app.activeDocument.activeLayer = layer;
             var outLayer = {
-                type: guessedName,
+                type: (guessedName || 'Image'),
                 layer_name: layer.name.replace(/\W+/g, '-'),
                 dimensions: {
                     left: layer.bounds[0].value,
@@ -251,7 +255,8 @@ var PSD2JSON = (function () {
                         outLayer.dimensions.line_height = outLayer.dimensions.height;
                     }
                 }
-                outLayer.details = details;
+                outLayer.type = 'Label';
+                outLayer.text = details;
             } else {
                 var helperDoc = this.doc.duplicate();
                 var helperLayer = helperDoc.activeLayer;
