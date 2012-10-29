@@ -22,7 +22,7 @@ ul {
 }
 
 a {
-  color: ;
+  color: #D50B29;
   text-decoration: none;
 }
 
@@ -418,6 +418,7 @@ header .action p {
   margin: 18px 0 0;
   width: 455px;
   padding: 0 5px;
+  text-shadow: 0 1px 0 #333;
   font-family: 'KlavikaRegular-OSF';
 }
 
@@ -426,7 +427,7 @@ header .action p {
 }
 
 .info .points li {
-  color: #eeeeee;
+  color: #efefef;
   font-size: 14px;
   padding: 3px 5px;
   float: none;
@@ -436,6 +437,7 @@ header .action p {
   background-color: #d81d37;
   margin-bottom: 5px;
   border: 1px solid #E52A44;
+  text-shadow: 0 1px 0 #333;
 }
 
  .demoActions {
@@ -461,8 +463,8 @@ header .action p {
 }
 
 .demoActions .pointer {
-  left: 407px;
-  top:520px;
+  left: 371px;
+  top: 581px;
   width: 37px;
   height: 49px;
   position: absolute;
@@ -513,6 +515,7 @@ header .action p {
 #working .details li {
   margin-bottom: 8px;
   font-size: 15px;
+  text-align: left;
   list-style: disc inside none;
 }
 
@@ -520,6 +523,7 @@ header .action p {
   color: #333333;
   list-style: none;
   font-size: 22px;
+  text-align: center;
   font-family: 'KlavikaMedCaps-SC';
 }
 
