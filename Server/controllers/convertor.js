@@ -41,7 +41,7 @@ exports.convert = function(req, res){
 
 exports.wait = function(req, res){
   var currentUser = req.user;
-  Job.find({owner: currentUser, status: 0}, function(err, jobs) {
+  Job.find({owner: currentUser, status: { $in: [1,3,4] }}, function(err, jobs) {
     if (err) console.log(err);
     res.render('convertor/wait', { title: 'Wait', jobs: jobs });
   });

@@ -61,16 +61,18 @@ var fs = require('fs.extra');
           function(err, result) {
             if (err) { callback(err); return; }
             
-            fs.move(result, )
+            var filename = Date.now().toString() + '.zip';
             
-            console.log(results);
-            // Update output path in db record for currentJob
-             currentJob.saveStatus(5);
-             currentJob = null;
+            fs.move(result, path.join(__dirname, 'public', 'output', filename), function(err) {
+              currentJob.saveOutput(filename);
+              currentJob.saveStatus(5);
+              currentJob = null;
+              callback(null);
+            });
             
             //Remove the next line if you want to continue the processing
             // process.exit(0);
-            callback(null);
+            
           });
       }
       else {

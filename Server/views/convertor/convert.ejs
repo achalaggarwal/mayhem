@@ -29,7 +29,7 @@
             <td class="title"><%= jobs[i].filename %></td>
             <td class="date"><%= jobs[i].createdAt('MMMM DD YYYY, h:mm') %></td>
             <td class="status"><%= jobs[i].statusMessage() %></td>
-            <td class="action"><a href="<%= jobs[i].output %>">Download</a></td>
+            <td class="action"><% if(jobs[i].status == 5) { -%><a href="output/<%= jobs[i].output %>">Download</a><% } -%></td>
           </tr>
           <% } %>
         <% } %>

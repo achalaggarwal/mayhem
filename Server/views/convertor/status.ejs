@@ -4,5 +4,6 @@
     sendRequest("<%= job._id %>");  
   }, 2000);
   <% } %>
+  
   updateStatus("<%= job._id %>", "<%= job.statusMessage() %>");
 </script>
