@@ -21,6 +21,8 @@ var express = require('express')
  
 require('./models/models.js');
 
+require('./processor.js');
+
 // Passport session setup.
 passport.serializeUser(function(user, done) {
   done(null, user.id);

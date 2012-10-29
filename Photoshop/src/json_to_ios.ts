@@ -2,21 +2,27 @@ var fs = require('fs');
 
 class JSON2IOS {
   constructor(public json:any){
-    this.data = {};
-    this.data.width  = this.json.dimensions.width;
-    this.data.height = this.json.dimensions.height;
-    this.data.objects = [];
   }
 
   normalize(data){
     var x1=9999,y1=9999,x2=0,y2=0,control,controls=[],out={};
 
     if (!data.objects) {
-      out.dimensions = data.dimensions;
-      out.type       = data.type;
+
+      if(data.type == 'NavigationBar') {
+        this.navBar = data;
+        console.log(this.navBar);
+        return null;
+      }
+
+      out.dimensions = { left: data.dimensions.left/2, top: data.dimensions.top/2, width: data.dimensions.width/2, height: data.dimensions.height/2 };
+      out.type       = (data.type || 'Image').toLowerCase();
       out.frame      = this.stringify(out.dimensions);
 
-      if (data.type == 'Button') {
+      if (out.type == 'background')
+        out.type = 'image';
+
+      if (out.type == 'button') {
         if (data.text) {
           out.background = data.image || "";
         } else {
@@ -27,16 +33,23 @@ class JSON2IOS {
       }
 
       if (data.text) {
-        out.text = data.text.details.text;
-        out.font = data.text.details.font;
-        out.fontSize = data.text.details.size || 17;
-        out.fontcolor = [data.text.details.red/255, data.text.details.blue/255, data.text.details.green/255, 1.0];
+        out.text      = data.text.text;
+        out.font      = data.text.font;
+        out.fontsize  = (data.text.size || 34)/2;
+        out.fontcolor = [data.text.red/255, data.text.blue/255, data.text.green/255, 1.0];
+      } else if (out.type == 'button' || out.type == "textfield") {
+        out.text      = "";
+        out.font      = "Helvetica";
+        out.fontsize  = 17;
+        out.fontcolor = [0, 0, 0, 1.0];
       }
 
     } else {
       for (var i=0; i< data.objects.length; i++) {
         control  = data.objects[i];
-        controls = controls.concat(this.normalize(control));
+        var normalized_objects = this.normalize(control);
+        if (normalized_objects !== null)
+          controls = controls.concat(normalized_objects);
       }
 
       for (var i=0; i< controls.length; i++) {
@@ -58,9 +71,9 @@ class JSON2IOS {
         control.frame = this.stringify(control.dimensions);
       }
 
-      out.dimensions = { left: x1, top: y1, width: x2-x1, height: y2-y1 };
+      out.dimensions = { left: x1, top: y1, width: (x2-x1), height: (y2-y1) };
       out.frame      = this.stringify(out.dimensions);
-      out.type       = 'View';
+      out.type       = 'view';
       out.objects    = controls;
     }
 
@@ -72,7 +85,34 @@ class JSON2IOS {
   }
 
   convert(){
-    return this.normalize(this.json);
+    this.data         = this.normalize(this.json);
+    this.data.appname = "TestApp";
+
+    if (this.navBar) {
+      this.data.navbar  = {
+        "hidden"            : (this.navBar.image.length > 0)? 0:1,
+        "background"        : this.navBar.image
+      };
+
+      if(this.navBar.image.length > 0) {
+        for (var i=0; i< this.data.objects.length; i++) {
+          var _object = this.data.objects[i];
+          _object.dimensions.top -= 44;
+          _object.frame      = this.stringify(_object.dimensions);
+        }
+      }
+    } else {
+      this.data.navbar  = {
+        "hidden"            : 1,
+        "background"        : null
+      };
+    }
+
+    this.data.device = 0;
+    this.data.width  = this.json.dimensions.width/2;
+    this.data.height = this.json.dimensions.height/2;
+
+    return this.data;
   }
 }
 

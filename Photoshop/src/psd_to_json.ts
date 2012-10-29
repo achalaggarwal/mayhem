@@ -13,26 +13,25 @@ class PSD2JSON {
     this.doc                = this.app.activeDocument;
     this.mainDoc            = this.doc;
     this.doc                = this.mainDoc.duplicate();
-
-    this.folder       = new Folder(this.exportDir);
-    var imagesFolder  = new Folder(this.exportDir +"/images");
+    this.folder             = new Folder(this.exportDir);
 
     if(!this.folder.exists)
       this.folder.create();
-
-    if(!imagesFolder.exists)
-      imagesFolder.create();
   }
 
   process(){
     this.preferences.rulerUnits = Units.PIXELS;
     var dimensions = { top: 0, left: 0, width: parseInt(this.doc.width), height: parseInt(this.doc.height) };
+
     this.cleanUpLayers(this.doc.layers);
     var traversed = this.traverse(this.doc.layers);
+
     this.doc.close(SaveOptions.DONOTSAVECHANGES);
     this.mainDoc.close(SaveOptions.DONOTSAVECHANGES);
+
     traversed = { dimensions: dimensions, objects: traversed };
     this.preferences.rulerUnits = this.originalRulerUnits;
+
     var file = new File(this.jsonCache);
     file.open('w');
     file.writeln(js_beautify(JSON.stringify(traversed), {indent_size: 2, indent_char: ' '}));
@@ -87,11 +86,29 @@ class PSD2JSON {
 
     this.app.activeDocument = helperDoc;
 
-    for (var i in _remove) {
+    for (var i=0; i< _remove.length; i++) {
       _remove[i].remove();
     }
 
-    return _properties;
+    if (_properties && _properties.text)
+      return _properties.text;
+  }
+
+  removeSiblings(layer, parent) {
+    var _layer;
+
+    for (var i=0; i< parent.layers.length; i++) {
+      _layer = parent.layers[i];
+      if (_layer.typename == "LayerSet" && _layer.name != layer.name) {
+        this.removeSiblings(layer, _layer);
+      } else if (_layer.name != layer.name) {
+        _layer.visible = false;
+      } else {
+        _layer.visible = true;
+      }
+    }
+
+    return true;
   }
 
   trimLayer(layer, doc) {
@@ -120,15 +137,15 @@ class PSD2JSON {
   }
 
   saveLayerAndClose(layer, doc, name) {
-    var imgRelPath         = "images/" + name + ".png";
-    layer.path             = this.folder.fullName + "/" + imgRelPath;
+    name                   = name + ".png"
+    layer.path             = this.folder.fullName + "/" + name;
     var saveOptions        = new PNGSaveOptions;
     saveOptions.interlaced = false;
 
     doc.saveAs(new File(layer.path), saveOptions, true, Extension.LOWERCASE);
     doc.close(SaveOptions.DONOTSAVECHANGES);
 
-    return layer.path;
+    return name;
   }
 
   render(layer, guessedName){
@@ -140,7 +157,7 @@ class PSD2JSON {
       this.app.activeDocument.activeLayer = layer;
 
       var outLayer = {
-        type: guessedName,
+        type: (guessedName || 'Image'),
         layer_name: layer.name.replace(/\W+/g, '-'),
         dimensions: {
           left   : layer.bounds[0].value,
@@ -180,7 +197,7 @@ class PSD2JSON {
         try { textStyle   = tsr0.getObjectValue(cTID("TxtS")); } catch(ex){}
         try { color       = textStyle.getObjectValue(cTID("Clr ")); } catch(ex){}
         try { autoLeading = textStyle.getBoolean(sTID("autoLeading")); } catch(ex){}
-        try { size        = parseInt(textStyle.getUnitDoubleValue(cTID("Sz  ", pts))); } catch(ex){}
+        try { size        = parseInt(textStyle.getUnitDoubleValue(cTID("Sz  ", 'pts'))); } catch(ex){}
         try { leading     = autoLeading ? false : textStyle.getUnitDoubleValue(cTID("Ldng")); } catch(ex){}
         try { text        = ti.contents; } catch(ex){}
         try { font        = textStyle.getString(cTID("FntN")); } catch(ex){}
@@ -196,10 +213,6 @@ class PSD2JSON {
           text  : text,
           font  : font || 'Helvetica'
         };
-
-        if (size > maxFontSize) {
-          maxFontSize = size;
-        }
 
         if (!autoLeading) {
           if (leading > maxLineHeight) {
@@ -219,12 +232,14 @@ class PSD2JSON {
           // we aren't sure whether the layer is single-line but chances are high in this case
           outLayer.dimensions.line_height = outLayer.dimensions.height;
         }
-
-        outLayer.details = details;
+        outLayer.type  = 'Label';
+        outLayer.text  = details;
 
       } else {
         var helperDoc = this.doc.duplicate(),
           helperLayer = helperDoc.activeLayer;
+
+        this.removeSiblings(helperLayer, helperDoc);
 
         if (guessedName == 'Button'
          || guessedName == 'TextField'
@@ -244,8 +259,7 @@ class PSD2JSON {
         outLayer.dimensions.top   += outLayer.dimensions.height - helperDoc.height.value;
         outLayer.dimensions.width  = helperDoc.width.value;
         outLayer.dimensions.height = helperDoc.height.value;
-
-        outLayer.image = this.saveLayerAndClose(helperLayer, helperDoc, outLayer.layer_name);
+        outLayer.image             = this.saveLayerAndClose(helperLayer, helperDoc, outLayer.layer_name);
       }
 
       if (outLayer.dimensions.left < 0) outLayer.dimensions.left = 0;
@@ -283,8 +297,8 @@ class PSD2JSON {
         newLayer.move(newLayer.parent.layers[newLayer.parent.layers.length-1], ElementPlacement.PLACEAFTER);
       }
 
-      for(var i in _mergeLayers) {
-        _layer = _mergeLayers.reverse()[i];
+      for(var i = 0; i < _mergeLayers.length; i++) {
+        _layer = _mergeLayers[_mergeLayers.length-1 - i];
         _layer.move(newLayer, ElementPlacement.INSIDE);
       }
 
@@ -317,6 +331,6 @@ class PSD2JSON {
       }
     }
 
-    return parsed;
+    return parsed.reverse();
   }
 }
