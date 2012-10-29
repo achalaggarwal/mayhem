@@ -30,7 +30,8 @@ class PSD2IOS {
 
   convert(done) {
     var execPS = (done)=> {
-      exec('open ' + this.scriptPath, (error, stdout, stderr)=> {
+      var cmd = (process.platform == 'darwin')? 'open ':'start ';
+      exec(cmd + this.scriptPath, (error, stdout, stderr)=> {
         done();
       });
     }

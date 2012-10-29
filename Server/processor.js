@@ -66,8 +66,7 @@ var fs = require('fs');
              currentJob = null;
             
             //Remove the next line if you want to continue the processing
-            //process.exit(0);
-            
+            // process.exit(0);
             callback(null);
           });
       }

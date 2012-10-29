@@ -36,7 +36,8 @@ var PSD2IOS = (function () {
     PSD2IOS.prototype.convert = function (done) {
         var _this = this;
         var execPS = function (done) {
-            exec('open ' + _this.scriptPath, function (error, stdout, stderr) {
+            var cmd = (process.platform == 'darwin') ? 'open ' : 'start ';
+            exec(cmd + _this.scriptPath, function (error, stdout, stderr) {
                 done();
             });
         };
