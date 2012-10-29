@@ -3,7 +3,7 @@ var PSD2IOS = require('../Photoshop/lib/src/psd_to_ios').PSD2IOS;
 var request = require('request');
 var path = require('path');
 var jsonui = require('jsonui');
-var fs = require('fs');
+var fs = require('fs.extra');
 
 (function() {
   var currentJob = null;
@@ -58,8 +58,11 @@ var fs = require('fs');
             toJSON,
             toProject
           ],
-          function(err, results) {
-            console.log(err);
+          function(err, result) {
+            if (err) { callback(err); return; }
+            
+            fs.move(result, )
+            
             console.log(results);
             // Update output path in db record for currentJob
              currentJob.saveStatus(5);
