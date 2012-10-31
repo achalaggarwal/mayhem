@@ -12,10 +12,10 @@ var createJob = function(req, res, object) {
         currentUser.jobs.push(job);
         currentUser.save(function(err) {
           if(err) console.log(err);
+          res.render('ajaxRedirect', {url: '/convert'});
         });
       }
     });
-    res.render('ajaxRedirect', {url: '/wait'});
 };
 
 /*
