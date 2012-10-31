@@ -59,7 +59,7 @@ var fs = require('fs.extra');
             toProject
           ],
           function(err, result) {
-            if (err) { callback(err); return; }
+            if (err) { currentJob.saveStatus(2); callback(err); return; }
             
             var filename = Date.now().toString() + '.zip';
             
