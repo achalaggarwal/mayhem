@@ -44,6 +44,13 @@ Job.prototype.saveStatus = function(val) {
   });
 };
 
+Job.prototype.saveOutput = function(filename) {
+  this.output = filename;
+  this.save(function(err) {
+    if(err) console.log(err);
+  });
+};
+
 /*
  * Process Job
  */

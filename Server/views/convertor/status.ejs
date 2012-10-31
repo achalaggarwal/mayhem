@@ -1,8 +1,13 @@
 <script type="text/javascript">
-  <% if(job.status != 5) { %>
+  <% if(job.status != 5) { -%>
   setTimeout(function() {
     sendRequest("<%= job._id %>");  
   }, 2000);
-  <% } %>
+  <% } -%>
+  
   updateStatus("<%= job._id %>", "<%= job.statusMessage() %>");
+  
+  <% if(job.status == 5) { -%>
+  updateDownloadLink("<%= job._id %>", "<a href='output/<%= job.output %>'>Download</a>");
+  <% } -%>
 </script>

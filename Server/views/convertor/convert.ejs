@@ -1,4 +1,7 @@
 <% layout('../layout') -%>
+<script type="text/javascript">
+ var _jobs = [];
+</script>
 <div class="header layout clear">
   <div id="logo" class="alignLeft fl">Logo</div>
   <ul class="nav">
@@ -25,11 +28,11 @@
         
         <% if(jobs.length > 0) { %>
           <% for (var i = jobs.length - 1; i >= 0; i--) { %>
-          <tr>
+          <tr id="<%= jobs[i]._id %>">
             <td class="title"><%= jobs[i].filename %></td>
             <td class="date"><%= jobs[i].createdAt('MMMM DD YYYY, h:mm') %></td>
             <td class="status"><%= jobs[i].statusMessage() %></td>
-            <td class="action"><a href="<%= jobs[i].output %>">Download</a></td>
+            <td class="action"><% if(jobs[i].status == 5) { -%><a href="output/<%= jobs[i].output %>">Download</a><% } else { -%><img src="img/loader.gif" /><script type="text/javascript">_jobs.push({id: "<%= jobs[i].id %>"});</script><% } -%></td>
           </tr>
           <% } %>
         <% } %>
@@ -58,3 +61,32 @@ $('#upload').bind('click', function() {
   });
 });
 </script>
+
+<script type="text/javascript">
+
+function updateStatus(id, message) {
+  var selector = '#' + id + " .status";
+  $(selector).text(message);
+}
+
+function updateDownloadLink(id, action) {
+  var selector = '#' + id + " .action";
+  $(selector).html(action); 
+}
+
+function sendRequest(id) {
+  $.ajax({
+      type: 'POST',
+      url: '/status',
+      data: {id: id},
+      success: function(data) { $('body').append(data); }
+    });
+}
+
+for (var i = _jobs.length - 1; i >= 0; i--) { 
+  var id = _jobs[i].id;  
+  sendRequest(id);
+}
+
+</script>
+

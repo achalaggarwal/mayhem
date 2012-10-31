@@ -3,7 +3,7 @@ var PSD2IOS = require('../Photoshop/lib/src/psd_to_ios').PSD2IOS;
 var request = require('request');
 var path = require('path');
 var jsonui = require('jsonui');
-var fs = require('fs');
+var fs = require('fs.extra');
 
 (function() {
   var currentJob = null;
@@ -58,16 +58,21 @@ var fs = require('fs');
             toJSON,
             toProject
           ],
-          function(err, results) {
-            console.log(err);
-            console.log(results);
-            // Update output path in db record for currentJob
-             currentJob.saveStatus(5);
-             currentJob = null;
+          function(err, result) {
+            if (err) { currentJob.saveStatus(2); callback(err); return; }
+            
+            var filename = Date.now().toString() + '.zip';
+            
+            fs.move(result, path.join(__dirname, 'public', 'output', filename), function(err) {
+              currentJob.saveOutput(filename);
+              currentJob.saveStatus(5);
+              currentJob = null;
+              callback(null);
+            });
             
             //Remove the next line if you want to continue the processing
             // process.exit(0);
-            callback(null);
+            
           });
       }
       else {
